@@ -4,8 +4,8 @@
   "description": "Aulas de Clean Archtecture",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
-    "test:staged": "jest"
+    "test": "jest --watch",
+    "test:staged": "jest --passWithNoTests"
   },
   "repository": {
     "type": "git",

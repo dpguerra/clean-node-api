@@ -1,9 +1,7 @@
-interface SignUpBody {
-  body: { name: string, email: string, password: string, passwordConfirmation: string }
-}
+import { HttpResponse, HttpRequest } from '../protocols/http'
 
 export class SignUpController {
-  handle (request: SignUpBody): any {
+  handle (request: HttpRequest): HttpResponse {
     if (!request.body.name) {
       return {
         statusCode: 400,
@@ -16,5 +14,6 @@ export class SignUpController {
         body: new Error('Missing param: email')
       }
     }
+    return { statusCode: 200 }
   }
 }
