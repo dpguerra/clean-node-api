@@ -1,0 +1,39 @@
+{
+  "name": "primeiro-projeto",
+  "version": "0.0.1",
+  "description": "Aulas de Clean Archtecture",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "test:staged": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git"
+  },
+  "keywords": [
+    "plataformabr"
+  ],
+  "author": "Plataforma BR",
+  "license": "ISC",
+  "homepage": "",
+  "devDependencies": {
+    "@types/jest": "^25.2.1",
+    "@types/node": "^13.13.2",
+    "@typescript-eslint/eslint-plugin": "^2.29.0",
+    "@typescript-eslint/parser": "^2.29.0",
+    "eslint": "^6.8.0",
+    "eslint-config-standard": "^14.1.1",
+    "eslint-config-standard-with-typescript": "^16.0.0",
+    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1",
+    "git-commit-msg-linter": "^2.4.2",
+    "husky": "^4.2.5",
+    "jest": "^25.4.0",
+    "lint-staged": "^10.1.7",
+    "ts-jest": "^25.4.0",
+    "typescript": "^3.8.3"
+  }
+}
