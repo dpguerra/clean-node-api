@@ -1,9 +1,12 @@
 import { SignUpController } from './signUp'
 import { MissingParamError } from '../errors/missingParamError'
 
+const makeSut = (): SignUpController => {
+  return new SignUpController()
+}
+
 describe('SignUp Controller', () => {
   test('should return code 400 and a error if no name is provided', () => {
-    const sut = new SignUpController()
     const request = {
       body: {
         email: 'nome@example.com',
@@ -11,12 +14,11 @@ describe('SignUp Controller', () => {
         passwordConfirmation: 'password'
       }
     }
-    const response = sut.handle(request)
+    const response = makeSut().handle(request)
     expect(response.statusCode).toBe(400)
     expect(response.body).toEqual(new MissingParamError('name'))
   })
   test('should return code 400 and a error if no email is provided', () => {
-    const sut = new SignUpController()
     const request = {
       body: {
         name: 'Nome Qualquer',
@@ -24,12 +26,11 @@ describe('SignUp Controller', () => {
         passwordConfirmation: 'password'
       }
     }
-    const response = sut.handle(request)
+    const response = makeSut().handle(request)
     expect(response.statusCode).toBe(400)
     expect(response.body).toEqual(new MissingParamError('email'))
   })
   test('should return code 400 and a error if no password is provided', () => {
-    const sut = new SignUpController()
     const request = {
       body: {
         name: 'Nome Qualquer',
@@ -37,12 +38,11 @@ describe('SignUp Controller', () => {
         passwordConfirmation: 'password'
       }
     }
-    const response = sut.handle(request)
+    const response = makeSut().handle(request)
     expect(response.statusCode).toBe(400)
     expect(response.body).toEqual(new MissingParamError('password'))
   })
   test('should return code 400 and a error if no password confirmation is provided', () => {
-    const sut = new SignUpController()
     const request = {
       body: {
         name: 'Nome Qualquer',
@@ -50,7 +50,7 @@ describe('SignUp Controller', () => {
         password: 'password'
       }
     }
-    const response = sut.handle(request)
+    const response = makeSut().handle(request)
     expect(response.statusCode).toBe(400)
     expect(response.body).toEqual(new MissingParamError('passwordConfirmation'))
   })
