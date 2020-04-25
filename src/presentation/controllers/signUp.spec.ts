@@ -6,7 +6,6 @@ describe('SignUp Controller', () => {
     const sut = new SignUpController()
     const request = {
       body: {
-        name: '',
         email: 'nome@example.com',
         password: 'password',
         passwordConfirmation: 'password'
@@ -21,7 +20,6 @@ describe('SignUp Controller', () => {
     const request = {
       body: {
         name: 'Nome Qualquer',
-        email: '',
         password: 'password',
         passwordConfirmation: 'password'
       }
@@ -36,7 +34,6 @@ describe('SignUp Controller', () => {
       body: {
         name: 'Nome Qualquer',
         email: 'nome@example.com',
-        password: '',
         passwordConfirmation: 'password'
       }
     }
@@ -50,8 +47,7 @@ describe('SignUp Controller', () => {
       body: {
         name: 'Nome Qualquer',
         email: 'nome@example.com',
-        password: 'password',
-        passwordConfirmation: ''
+        password: 'password'
       }
     }
     const response = sut.handle(request)
