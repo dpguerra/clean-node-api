@@ -1,11 +1,9 @@
 import { SignUpController } from './signUp'
 import { MissingParamError, InvalidParamError, ServerError } from '../errors'
 import { EmailValidator } from '../protocols'
+import { AccountModel } from '../../domain/models/account'
+import { AddAccount, AddAccountModel } from '../../domain/usecases/addAccount'
 
-interface SutTypes {
-  sut: SignUpController
-  emailValidatorStub: EmailValidator
-}
 const makeEmailValidator = (should: boolean): EmailValidator => {
   class EmailValidatorStub implements EmailValidator {
     isValid (email: string): boolean {
@@ -14,11 +12,34 @@ const makeEmailValidator = (should: boolean): EmailValidator => {
   }
   return new EmailValidatorStub()
 }
+const makeAddAccount = (): AddAccount => {
+  class AddAccountStub implements AddAccount {
+    add (account: AddAccountModel): AccountModel {
+      const fakeAccount = {
+        id: 'valid_id',
+        name: 'valid_name',
+        email: 'valid_email@exemple.com',
+        password: 'valid_password'
+      }
+      return fakeAccount
+    }
+  }
+  return new AddAccountStub()
+}
+
+interface SutTypes {
+  sut: SignUpController
+  emailValidatorStub: EmailValidator
+  addAccountStub: AddAccount
+}
+
 const makeSut = (): SutTypes => {
   const emailValidatorStub = makeEmailValidator(true)
+  const addAccountStub = makeAddAccount()
   return {
-    sut: new SignUpController(emailValidatorStub),
-    emailValidatorStub
+    sut: new SignUpController(emailValidatorStub, addAccountStub),
+    emailValidatorStub,
+    addAccountStub
   }
 }
 
@@ -148,5 +169,23 @@ describe('SignUp Controller', () => {
     }
     const response = sut.handle(request)
     expect(response.statusCode).toBe(200)
+  })
+  test('should call AddAcount with correct values', () => {
+    const { sut, addAccountStub } = makeSut()
+    const addSpy = jest.spyOn(addAccountStub, 'add')
+    const request = {
+      body: {
+        name: 'Nome Qualquer',
+        email: 'nome@example.com',
+        password: 'password',
+        passwordConfirmation: 'password'
+      }
+    }
+    sut.handle(request)
+    expect(addSpy).toHaveBeenCalledWith({
+      name: 'Nome Qualquer',
+      email: 'nome@example.com',
+      password: 'password'
+    })
   })
 })
