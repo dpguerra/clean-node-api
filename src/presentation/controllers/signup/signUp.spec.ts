@@ -155,19 +155,6 @@ describe('SignUp Controller', () => {
     expect(response.statusCode).toBe(500)
     expect(response.body).toEqual(new ServerError())
   })
-  test('should return code 200 if all values passed', () => {
-    const { sut } = makeSut()
-    const request = {
-      body: {
-        name: 'Nome Qualquer',
-        email: 'nome@example.com',
-        password: 'password',
-        passwordConfirmation: 'password'
-      }
-    }
-    const response = sut.handle(request)
-    expect(response.statusCode).toBe(200)
-  })
   test('should call AddAcount with correct values', () => {
     const { sut, addAccountStub } = makeSut()
     const addSpy = jest.spyOn(addAccountStub, 'add')
@@ -203,5 +190,25 @@ describe('SignUp Controller', () => {
     const response = sut.handle(request)
     expect(response.statusCode).toBe(500)
     expect(response.body).toEqual(new ServerError())
+  })
+
+  test('should return code 200 if all values passed', () => {
+    const { sut } = makeSut()
+    const request = {
+      body: {
+        name: 'valid_name',
+        email: 'valid_email@exemple.com',
+        password: 'valid_password',
+        passwordConfirmation: 'valid_password'
+      }
+    }
+    const response = sut.handle(request)
+    expect(response.statusCode).toBe(200)
+    expect(response.body).toEqual({
+      id: 'valid_id',
+      name: 'valid_name',
+      email: 'valid_email@exemple.com',
+      password: 'valid_password'
+    })
   })
 })
