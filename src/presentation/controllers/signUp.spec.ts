@@ -136,4 +136,17 @@ describe('SignUp Controller', () => {
     expect(response.statusCode).toBe(500)
     expect(response.body).toEqual(new ServerError())
   })
+  test('should return code 200 if all values passed', () => {
+    const { sut } = makeSut()
+    const request = {
+      body: {
+        name: 'Nome Qualquer',
+        email: 'nome@example.com',
+        password: 'password',
+        passwordConfirmation: 'password'
+      }
+    }
+    const response = sut.handle(request)
+    expect(response.statusCode).toBe(200)
+  })
 })
