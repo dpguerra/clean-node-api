@@ -14,6 +14,14 @@ const makeEmailValidator = (should: boolean): EmailValidator => {
   }
   return new EmailValidatorStub()
 }
+const makeEmailValidatorWithError = (): EmailValidator => {
+  class EmailValidatorStub implements EmailValidator {
+    isValid (email: string): boolean {
+      throw new Error()
+    }
+  }
+  return new EmailValidatorStub()
+}
 const makeSut = (): SutTypes => {
   const emailValidatorStub = makeEmailValidator(true)
   return {
@@ -105,12 +113,7 @@ describe('SignUp Controller', () => {
     expect(isValidSpy).toHaveBeenCalledWith(request.body.email)
   })
   test('should return code 500 if EmailValidator throws', () => {
-    class EmailValidatorStub implements EmailValidator {
-      isValid (email: string): boolean {
-        throw new Error()
-      }
-    }
-    const emailValidatorStub = new EmailValidatorStub()
+    const emailValidatorStub = makeEmailValidatorWithError()
     const sut = new SignUpController(emailValidatorStub)
     const request = {
       body: {
