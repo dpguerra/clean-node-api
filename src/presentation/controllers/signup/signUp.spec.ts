@@ -203,7 +203,7 @@ describe('SignUp Controller', () => {
       }
     }
     const response = sut.handle(request)
-    expect(response.statusCode).toBe(200)
+    expect(response.statusCode).toBe(201)
     expect(response.body).toEqual({
       id: 'valid_id',
       name: 'valid_name',
