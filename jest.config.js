@@ -29,6 +29,7 @@ module.exports = {
   // notify: false,                                                                       /* Activates notifications for test results */
   // notifyMode: "failure-change",                                                        /* An enum that specifies notification mode. Requires { notify: true } */
   // preset: undefined,                                                                   /* A preset that is used as a base for Jest's configuration */
+  preset: '@shelf/jest-mongodb',
   // projects: undefined,                                                                 /* Run tests from one or more projects */
   // reporters: undefined,                                                                /* Use this configuration option to add custom reporters to Jest */
   // resetMocks: false,                                                                   /* Automatically reset mock state between every test */
