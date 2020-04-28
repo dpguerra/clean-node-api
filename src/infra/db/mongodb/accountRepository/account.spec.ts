@@ -1,6 +1,7 @@
 import { AccountMongoRepository } from './account'
 import { MongoHelper } from '../helpers/mangoHelper'
 import { MongoMemoryServer } from 'mongodb-memory-server'
+import { AddAccountRepository } from '../../../../data/protocols/addAccountRepository'
 
 describe('Account MongoDB Repository', () => {
   const mongod = new MongoMemoryServer()
@@ -15,8 +16,12 @@ describe('Account MongoDB Repository', () => {
     await mongod.stop()
   })
 
+  const makeSut = (): AddAccountRepository => {
+    return new AccountMongoRepository()
+  }
+
   test('should returns an account on success', async () => {
-    const sut = new AccountMongoRepository()
+    const sut = makeSut()
     const account = await sut.add({
       name: 'any_name',
       email: 'any_email@exemple.com',
