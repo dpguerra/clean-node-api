@@ -9,7 +9,7 @@ module.exports = {
   // clearMocks: false,                                                                   /* Automatically clear mock calls and instances between every test */
   // collectCoverage: false,                                                              /* Indicates whether the coverage information should be collected while executing the test */
   // collectCoverageFrom: undefined,                                                      /* An array of glob patterns indicating a set of files for which coverage information should be collected */
-  collectCoverageFrom: ['<rootDir>/src/**/*.ts'],
+  collectCoverageFrom: ['<rootDir>/src/**/*.ts', '!<rootDir>/src/main/**'],
   // coverageDirectory: 'coverage',                                                       /* The directory where Jest should output its coverage files */
   coverageDirectory: 'coverage',
   // coveragePathIgnorePatterns: ["/node_modules/"],                                      /* An array of regexp pattern strings used to skip coverage collection */
