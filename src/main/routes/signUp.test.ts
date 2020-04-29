@@ -1,7 +1,7 @@
 import request from 'supertest'
 import app from '../config/app'
 import { MongoMemoryServer } from 'mongodb-memory-server'
-import { MongoHelper } from '../../infra/db/mongodb/helpers/mangoHelper'
+import { MongoHelper } from '../../infra/db/mongodb/helpers/mongoHelper'
 
 describe('SignUp Routes', () => {
   const mongod = new MongoMemoryServer()

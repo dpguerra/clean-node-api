@@ -1,5 +1,5 @@
 import { AccountMongoRepository } from './account'
-import { MongoHelper } from '../helpers/mangoHelper'
+import { MongoHelper } from '../helpers/mongoHelper'
 import { MongoMemoryServer } from 'mongodb-memory-server'
 import { AddAccountRepository } from '../../../../data/protocols/addAccountRepository'
 
