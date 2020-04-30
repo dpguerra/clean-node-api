@@ -22,12 +22,12 @@ export class LogInController implements Controller {
       }
       const token = await this.authentication.auth(email, password)
       if (token) {
-        return await Promise.resolve(ok(token))
+        return ok(token)
       }
     } catch (error) {
       console.error(error)
       return serverError(error)
     }
-    return await Promise.resolve({ statusCode: 200, body: '' })
+    return ({ statusCode: 200, body: '' })
   }
 }
