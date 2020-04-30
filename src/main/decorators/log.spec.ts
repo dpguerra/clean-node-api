@@ -1,21 +1,21 @@
 import { LogControllerDecorator } from './log'
 import { Controller, HttpRequest, HttpResponse } from '../../presentation/protocols'
 import { serverError } from '../../presentation/helpers'
-import { LogErrorReposytory } from '../../data/protocols/logErrorRepository'
+import { LogErrorRepository, LogErrorReturnModel } from '../../data/protocols/logErrorRepository'
 
 interface SutTypes {
   sut: LogControllerDecorator
   controllerStub: Controller
-  logErrorRepositoryStub: LogErrorReposytory
+  logErrorRepositoryStub: LogErrorRepository
 }
 
-class LogErrorReposytoryStub implements LogErrorReposytory {
-  async log (stack: string): Promise<void> {
-    return await Promise.resolve()
+class LogErrorReposytoryStub implements LogErrorRepository {
+  async log (stack: string): Promise<LogErrorReturnModel> {
+    return await Promise.resolve({ id: 'any_id', stack: 'any_stack' })
   }
 }
 
-const makeLogRepository = (): LogErrorReposytory => {
+const makeLogRepository = (): LogErrorRepository => {
   return new LogErrorReposytoryStub()
 }
 const makeController = (): Controller => {
