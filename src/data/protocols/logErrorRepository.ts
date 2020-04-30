@@ -3,5 +3,5 @@ export interface LogErrorReturnModel {
   stack: string
 }
 export interface LogErrorRepository {
-  log(stack: string): Promise<LogErrorReturnModel>
+  logError (stack: string): Promise<LogErrorReturnModel>
 }

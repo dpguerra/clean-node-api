@@ -3,7 +3,7 @@ import { BCryptAdapter } from '../../infra/criptography/bCryptAdapter'
 import { AccountMongoRepository } from '../../infra/db/mongodb/accountRepository/account'
 import { DbAddAccount } from '../../data/usecases/addAccount/dbAddAccount'
 import { SignUpController } from '../../presentation/controllers/signup/signUp'
-import { DBLogErrorRepository } from '../../infra/db/mongodb/logErrorRepository/logError'
+import { LogErrorMongoRepository } from '../../infra/db/mongodb/logErrorRepository/logError'
 import { LogControllerDecorator } from './log'
 import { MongoMemoryServer } from 'mongodb-memory-server'
 import { MongoHelper } from '../../infra/db/mongodb/helpers/mongoHelper'
@@ -22,7 +22,7 @@ const makeSut = (): SutTypes => {
   const accountMongoRepository = new AccountMongoRepository()
   const dbAddAccount = new DbAddAccount(bCryptAdapter, accountMongoRepository)
   const signUpController = new SignUpController(emailValidatorAdapater, dbAddAccount)
-  const dbLogErorRepository = new DBLogErrorRepository()
+  const dbLogErorRepository = new LogErrorMongoRepository()
   return {
     sut: new LogControllerDecorator(signUpController, dbLogErorRepository),
     signUpController
@@ -61,6 +61,6 @@ describe('Log Controller Decorator', () => {
       }
     }
     const response = await sut.handle(request)
-    expect(response.body.stackId).toBeDefined()
+    expect(response.body.traceId).toBeDefined()
   })
 })

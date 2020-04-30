@@ -2,10 +2,10 @@ import { serverError } from '../../../../presentation/helpers'
 import { MongoHelper } from '../helpers/mongoHelper'
 import { MongoMemoryServer } from 'mongodb-memory-server'
 import { LogErrorRepository } from '../../../../data/protocols/logErrorRepository'
-import { DBLogErrorRepository } from './logError'
+import { LogErrorMongoRepository } from './logError'
 
 const makeSut = (): LogErrorRepository => {
-  return new DBLogErrorRepository()
+  return new LogErrorMongoRepository()
 }
 describe('Log Error MongoDB Repository', () => {
   const mongod = new MongoMemoryServer()
@@ -21,15 +21,15 @@ describe('Log Error MongoDB Repository', () => {
   })
 
   beforeEach(async () => {
-    const accountCollection = await MongoHelper.getCollection('accounts')
-    await accountCollection.deleteMany({})
+    const errorCollection = await MongoHelper.getCollection('errors')
+    await errorCollection.deleteMany({})
   })
   test('should returns un new id on success', async () => {
     const sut = makeSut()
     const fakeError = new Error()
     fakeError.stack = 'any_stack'
     const error = serverError(fakeError)
-    const result = await sut.log(error.body.stack)
+    const result = await sut.logError(error.body.stack)
     expect(result).toHaveProperty('id')
   })
 })
