@@ -4,10 +4,10 @@ import { EmailValidator, AccountModel, AddAccount, AddAccountModel } from './sig
 import { HttpRequest } from '../../protocols'
 import { created, serverError, badRequest } from '../../helpers'
 
-const makeEmailValidator = (should: boolean): EmailValidator => {
+const makeEmailValidator = (): EmailValidator => {
   class EmailValidatorStub implements EmailValidator {
     isValid (email: string): boolean {
-      return should
+      return true
     }
   }
   return new EmailValidatorStub()
@@ -28,7 +28,7 @@ interface SutTypes {
 }
 
 const makeSut = (): SutTypes => {
-  const emailValidatorStub = makeEmailValidator(true)
+  const emailValidatorStub = makeEmailValidator()
   const addAccountStub = makeAddAccount()
   return {
     sut: new SignUpController(emailValidatorStub, addAccountStub),
