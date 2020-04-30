@@ -2,6 +2,7 @@ import { LogInController } from './logIn'
 import { badRequest } from '../../helpers'
 import { MissingParamError } from '../../errors'
 import { EmailValidator } from '../../protocols/emailValidator'
+import { HttpRequest } from '../../protocols'
 
 const makeEmailValidator = (): EmailValidator => {
   class EmailValidatorStub implements EmailValidator {
@@ -23,6 +24,13 @@ const makeSup = (): SutTypes => {
     emailValidatorStub
   }
 }
+
+const makeFakeRequest = (): HttpRequest => ({
+  body: {
+    email: 'valid_email@exemple.com',
+    password: 'valid_password'
+  }
+})
 
 describe('LogIn Controller', () => {
   test('should returns 400 and an error if no email is passed', async () => {
@@ -48,13 +56,7 @@ describe('LogIn Controller', () => {
   test('should call EmailValidator with corrects params', async () => {
     const { sut, emailValidatorStub } = makeSup()
     const isValidSpy = jest.spyOn(emailValidatorStub, 'isValid')
-    const request = {
-      body: {
-        email: 'valid_email@exemple.com',
-        password: 'valid_password'
-      }
-    }
-    await sut.handle(request)
+    await sut.handle(makeFakeRequest())
     expect(isValidSpy).toHaveBeenCalledWith('valid_email@exemple.com')
   })
 })
