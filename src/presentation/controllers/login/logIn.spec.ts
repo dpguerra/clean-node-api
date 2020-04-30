@@ -1,37 +1,48 @@
 import { LogInController } from './logIn'
-import { HttpRequest, HttpResponse } from '../../protocols'
 import { badRequest } from '../../helpers'
 import { MissingParamError } from '../../errors'
+import { EmailValidator } from '../../protocols/emailValidator'
 
+const makeEmailValidator = (): EmailValidator => {
+  class EmailValidatorStub implements EmailValidator {
+    isValid (email: string): boolean {
+      return true
+    }
+  }
+  return new EmailValidatorStub()
+}
 interface SutTypes {
   sut: LogInController
+  emailValidatorStub: EmailValidator
 }
 
 const makeSup = (): SutTypes => {
+  const emailValidatorStub = makeEmailValidator()
   return {
-    sut: new LogInController()
+    sut: new LogInController(emailValidatorStub),
+    emailValidatorStub
   }
 }
 
 describe('LogIn Controller', () => {
   test('should returns 400 and an error if no email is passed', async () => {
     const { sut } = makeSup()
-    const request: HttpRequest = {
+    const request = {
       body: {
         password: 'valid_password'
       }
     }
-    const reponse: HttpResponse = await sut.handle(request)
-    expect(reponse).toEqual(badRequest(new MissingParamError('email')))
+    const response = await sut.handle(request)
+    expect(response).toEqual(badRequest(new MissingParamError('email')))
   })
   test('should returns 400 and an error if no password is passed', async () => {
     const { sut } = makeSup()
-    const request: HttpRequest = {
+    const request = {
       body: {
         email: 'valid_email@exemple.com'
       }
     }
-    const reponse: HttpResponse = await sut.handle(request)
-    expect(reponse).toEqual(badRequest(new MissingParamError('password')))
+    const response = await sut.handle(request)
+    expect(response).toEqual(badRequest(new MissingParamError('password')))
   })
 })
