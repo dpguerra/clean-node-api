@@ -1,3 +1,3 @@
 export interface Validation<R> {
-  validate (input: {}): null | R
+  validate (input: Record<string, any>): null | R
 }
