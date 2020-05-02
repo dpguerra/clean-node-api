@@ -24,4 +24,20 @@ describe('Missing Params Validation Helper', () => {
     })
     expect(result).toEqual(new Error('required_field'))
   })
+  test('should return an error for the first missing field', () => {
+    const sut = new MissingParamValidation(['required_field', 'other_required_field'])
+    const result = sut.validate({
+      any_field: 'any_value'
+    })
+    expect(result).toEqual(new Error('required_field'))
+  })
+  test('should return return null if all required fields are provided', () => {
+    const sut = new MissingParamValidation(['required_field', 'other_required_field'])
+    const result = sut.validate({
+      any_field: 'any_value',
+      required_field: 'any_value',
+      other_required_field: 'any_value'
+    })
+    expect(result).toBeNull()
+  })
 })
