@@ -39,4 +39,10 @@ describe('Composed Validation Helper', () => {
     const result = sut.validate(makeInput())
     expect(result).toEqual(new Error())
   })
+  test('should returns an Error on first validation fail', () => {
+    const { sut, validationStubs } = makeSut()
+    validationStubs.forEach((validationStub, index) => jest.spyOn(validationStub, 'validate').mockImplementationOnce(() => new Error(`#${index}`)))
+    const result = sut.validate(makeInput())
+    expect(result).toEqual(new Error('#0'))
+  })
 })
