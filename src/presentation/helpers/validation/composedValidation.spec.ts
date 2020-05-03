@@ -3,8 +3,7 @@ import { ComposedValidation } from './composedValidation'
 
 interface SutTypes {
   sut: Validation<Error>
-  validationStub: Validation<Error>
-  anotherValidationStub: Validation<Error>
+  validationStubs: Array<Validation<Error>>
 }
 
 const makeInput = (): {field: string} => ({
@@ -17,20 +16,21 @@ const makeSut = (): SutTypes => {
       return null
     }
   }
-  const validationStub = new ValidationStub()
-  const anotherValidationStub = new ValidationStub()
+  const validationStubs = [
+    new ValidationStub(),
+    new ValidationStub()
+  ]
   return {
-    sut: new ComposedValidation([validationStub]),
-    validationStub,
-    anotherValidationStub
+    sut: new ComposedValidation(validationStubs),
+    validationStubs
   }
 }
 describe('Composed Validation Helper', () => {
-  test('should call individual validation with corrects values', () => {
-    const { sut, validationStub } = makeSut()
-    const validateSpy = jest.spyOn(validationStub, 'validate')
+  test('should calls individuals validations with corrects values', () => {
+    const { sut, validationStubs } = makeSut()
+    const validateSpies = validationStubs.map(validationStub => jest.spyOn(validationStub, 'validate'))
     const input = makeInput()
     sut.validate(input)
-    expect(validateSpy).toHaveBeenCalledWith(input)
+    validateSpies.forEach(validateSpy => expect(validateSpy).toHaveBeenCalledWith(input))
   })
 })
