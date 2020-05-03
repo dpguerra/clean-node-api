@@ -45,4 +45,9 @@ describe('Composed Validation Helper', () => {
     const result = sut.validate(makeInput())
     expect(result).toEqual(new Error('#0'))
   })
+  test('should returns null if no individual validation fail', () => {
+    const { sut } = makeSut()
+    const result = sut.validate(makeInput())
+    expect(result).toBeNull()
+  })
 })
