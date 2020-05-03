@@ -9,6 +9,7 @@ import { MongoMemoryServer } from 'mongodb-memory-server'
 import { MongoHelper } from '../../infra/db/mongodb/helpers/mongoHelper'
 import { Controller } from '../../presentation/protocols'
 import { serverError } from '../../presentation/helpers'
+import { ComposedValidation, MissingParamValidation, ConfirmationParamsValidation, EmailValidation } from '../../presentation/helpers/validation'
 
 interface SutTypes {
   sut: LogControllerDecorator
@@ -21,7 +22,12 @@ const makeSut = (): SutTypes => {
   const bCryptAdapter = new BCryptAdapter(salt)
   const accountMongoRepository = new AccountMongoRepository()
   const dbAddAccount = new DbAddAccount(bCryptAdapter, accountMongoRepository)
-  const signUpController = new SignUpController(emailValidatorAdapater, dbAddAccount)
+  const validation = new ComposedValidation([
+    new MissingParamValidation(['name', 'email', 'password', 'passwordConfirmation']),
+    new ConfirmationParamsValidation('password', 'passwordConfirmation'),
+    new EmailValidation(emailValidatorAdapater)
+  ])
+  const signUpController = new SignUpController(dbAddAccount, validation)
   const dbLogErorRepository = new LogErrorMongoRepository()
   return {
     sut: new LogControllerDecorator(signUpController, dbLogErorRepository),
