@@ -6,7 +6,7 @@ import { AccountMongoRepository } from '../../infra/db/mongodb/accountRepository
 import { Controller } from '../../presentation/protocols/controller'
 import { LogControllerDecorator } from '../decorators/log'
 import { LogErrorMongoRepository } from '../../infra/db/mongodb/logErrorRepository/logError'
-import { ComposedValidation, MissingParamValidation, ConfirmationParamsValidation, EmailValidation } from '../../presentation/helpers/validation'
+import { ComposedValidation, RequiredParamValidation, ConfirmationParamsValidation, EmailValidation } from '../../presentation/helpers/validation'
 
 export const makeSignUpController = (): Controller => {
   const salt = 12
@@ -15,7 +15,7 @@ export const makeSignUpController = (): Controller => {
   const accountMongoRepository = new AccountMongoRepository()
   const dbAddAccount = new DbAddAccount(bCryptAdapter, accountMongoRepository)
   const validation = new ComposedValidation([
-    new MissingParamValidation(['name', 'email', 'password', 'passwordConfirmation']),
+    new RequiredParamValidation(['name', 'email', 'password', 'passwordConfirmation']),
     new ConfirmationParamsValidation('password', 'passwordConfirmation'),
     new EmailValidation(emailValidatorAdapater)
   ])
