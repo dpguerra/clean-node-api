@@ -37,4 +37,10 @@ describe('Email Validation Helper', () => {
     const result = sut.validate(input)
     expect(result).toEqual(new Error('email'))
   })
+  test('should returns null on validation success', () => {
+    const { sut } = makeSut()
+    const input = makeInput()
+    const result = sut.validate(input)
+    expect(result).toBeNull()
+  })
 })
