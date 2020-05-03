@@ -61,6 +61,15 @@ describe('SignUp Controller', () => {
     await sut.handle(request)
     expect(validateSpy).toHaveBeenCalledWith(request.body)
   })
+  test('should return code 500 if Validation throws', async () => {
+    const { sut, validationStub } = makeSut()
+    jest.spyOn(validationStub, 'validate').mockImplementation(() => {
+      throw new Error()
+    })
+    const request = makeFakeRequest()
+    const response = await sut.handle(request)
+    expect(response).toEqual(serverError(new Error()))
+  })
   test('should call AddAcount with correct values', async () => {
     const { sut, addAccountStub } = makeSut()
     const addSpy = jest.spyOn(addAccountStub, 'add')
