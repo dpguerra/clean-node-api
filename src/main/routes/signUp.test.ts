@@ -32,15 +32,4 @@ describe('SignUp Routes', () => {
       })
       .expect(201)
   })
-  test('should return an error', async () => {
-    await request(app)
-      .post('/api/signup')
-      .send({
-        name: 'valid_name',
-        email: 'valid_email',
-        password: 'valid_password',
-        passwordConfirmation: 'valid_password'
-      })
-      .expect(400)
-  })
 })
