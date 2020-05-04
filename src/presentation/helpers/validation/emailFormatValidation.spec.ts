@@ -3,6 +3,7 @@ import { EmailValidator } from '../../protocols/emailValidator'
 import { EmailValidation } from './emailFormatValidation'
 import { InvalidParamError } from '../../errors'
 
+const fieldName = 'email'
 const makeInput = (): {email: string} => ({
   email: 'valid_email@exemple.com'
 })
@@ -19,7 +20,7 @@ const makeSut = (): SutTypes => {
   }
   const emailValidatorStub = new EmailValidatorStub()
   return {
-    sut: new EmailValidation('email', emailValidatorStub),
+    sut: new EmailValidation(fieldName, emailValidatorStub),
     emailValidatorStub
   }
 }
@@ -36,12 +37,19 @@ describe('Email Validation Helper', () => {
     jest.spyOn(emailValidatorStub, 'isValid').mockReturnValueOnce(false)
     const input = makeInput()
     const result = sut.validate(input)
-    expect(result).toEqual(new InvalidParamError('email'))
+    expect(result).toEqual(new InvalidParamError(fieldName))
   })
   test('should returns null on validation success', () => {
     const { sut } = makeSut()
     const input = makeInput()
     const result = sut.validate(input)
     expect(result).toBeNull()
+  })
+  test('should throws if validator adapater throw', () => {
+    const { sut, emailValidatorStub } = makeSut()
+    jest.spyOn(emailValidatorStub, 'isValid').mockImplementationOnce(() => {
+      throw new Error()
+    })
+    expect(sut.validate).toThrow()
   })
 })
