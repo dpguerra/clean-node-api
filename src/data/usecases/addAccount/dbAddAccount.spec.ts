@@ -1,5 +1,5 @@
 import { DbAddAccount } from './dbAddAccount'
-import { Encrypter } from '../../protocols/criptography/encrypter'
+import { Encrypter } from '../../protocols/criptography/hasher'
 import { AddAccount, AddAccountModel } from '../../../domain/usecases/addAccount'
 import { AccountModel } from './dbAddAccountProtocols'
 import { AddAccountRepository } from '../../protocols/db/addAccountRepository'
