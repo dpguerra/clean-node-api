@@ -13,7 +13,7 @@ export class LogInController implements Controller {
         return badRequest(validationResult)
       }
       const { email, password } = request.body
-      return ok(await this.authentication.auth(email, password))
+      return ok(await this.authentication.auth({ email, password }))
     } catch (error) {
       if (error === 'unauthorized') {
         return unauthorized(new InvalidUserOrPassword())
