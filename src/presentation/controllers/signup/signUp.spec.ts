@@ -1,7 +1,7 @@
 import { SignUpController } from './signUp'
 import { AccountModel, AddAccount, AddAccountModel } from './signUpProtocols'
 import { HttpRequest } from '../../protocols'
-import { created, serverError } from '../../helpers'
+import { created, serverError, badRequest } from '../../helpers'
 import { Validation } from '../../protocols/validation'
 
 const makeValidation = (): Validation<Error> => {
@@ -60,6 +60,12 @@ describe('SignUp Controller', () => {
     const request = makeFakeRequest()
     await sut.handle(request)
     expect(validateSpy).toHaveBeenCalledWith(request.body)
+  })
+  test('should returns 400 and an error if Validation fails', async () => {
+    const { sut, validationStub } = makeSut()
+    jest.spyOn(validationStub, 'validate').mockReturnValueOnce(new Error())
+    const response = await sut.handle(makeFakeRequest())
+    expect(response).toEqual(badRequest(new Error()))
   })
   test('should return code 500 if Validation throws', async () => {
     const { sut, validationStub } = makeSut()
