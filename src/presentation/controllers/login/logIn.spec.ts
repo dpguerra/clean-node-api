@@ -1,5 +1,5 @@
 import { LogInController } from './logIn'
-import { serverError, unauthorized, ok } from '../../helpers'
+import { serverError, unauthorized, ok, badRequest } from '../../helpers'
 import { InvalidUserOrPassword } from '../../errors'
 import { Authentication, HttpRequest } from './logInProtocols'
 import { Validation } from '../../protocols/validation'
@@ -46,12 +46,18 @@ const makeFakeRequest = (): HttpRequest => ({
 })
 
 describe('LogIn Controller', () => {
-  test('should call Validation with corrects values', async () => {
+  test('should calls Validation with corrects values', async () => {
     const { sut, validationStub } = makeSut()
     const validateSpy = jest.spyOn(validationStub, 'validate')
     const request = makeFakeRequest()
     await sut.handle(request)
     expect(validateSpy).toHaveBeenCalledWith(request.body)
+  })
+  test('should returns 400 and an error if Validation fails', async () => {
+    const { sut, validationStub } = makeSut()
+    jest.spyOn(validationStub, 'validate').mockReturnValueOnce(new Error())
+    const response = await sut.handle(makeFakeRequest())
+    expect(response).toEqual(badRequest(new Error()))
   })
   test('should returns 500 if Validation throws', async () => {
     const { sut, validationStub } = makeSut()
@@ -61,7 +67,7 @@ describe('LogIn Controller', () => {
     const response = await sut.handle(makeFakeRequest())
     expect(response).toEqual(serverError(new Error()))
   })
-  test('should call Autentication with corrects values', async () => {
+  test('should calls Autentication with corrects values', async () => {
     const { sut, authenticationStub } = makeSut()
     const authSpy = jest.spyOn(authenticationStub, 'auth')
     await sut.handle(makeFakeRequest())
