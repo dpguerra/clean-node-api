@@ -6,6 +6,6 @@ export const makeValidationCompose = (): ValidationCompose => {
   return new ValidationCompose([
     new RequiredFieldsValidation(['name', 'email', 'password', 'passwordConfirmation']),
     new ComparedFieldsValidation('password', 'passwordConfirmation'),
-    new EmailValidation(emailValidatorAdapater)
+    new EmailValidation('email', emailValidatorAdapater)
   ])
 }

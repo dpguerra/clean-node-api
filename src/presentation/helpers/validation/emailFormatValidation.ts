@@ -3,10 +3,10 @@ import { EmailValidator } from '../../protocols/emailValidator'
 import { InvalidParamError } from '../../errors'
 
 export class EmailValidation implements Validation <InvalidParamError> {
-  constructor (private readonly emailValidator: EmailValidator) { }
-  validate (input: { email: string }): null | InvalidParamError {
-    if (!this.emailValidator.isValid(input.email)) {
-      return new InvalidParamError('email')
+  constructor (private readonly field: string, private readonly emailValidator: EmailValidator) { }
+  validate (input: Record<string, any>): null | InvalidParamError {
+    if (!this.emailValidator.isValid(input[this.field])) {
+      return new InvalidParamError(this.field)
     }
     return null
   }

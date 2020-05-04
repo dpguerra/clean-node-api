@@ -19,7 +19,7 @@ const makeSut = (): SutTypes => {
   }
   const emailValidatorStub = new EmailValidatorStub()
   return {
-    sut: new EmailValidation(emailValidatorStub),
+    sut: new EmailValidation('email', emailValidatorStub),
     emailValidatorStub
   }
 }
