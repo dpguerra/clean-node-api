@@ -1,4 +1,4 @@
-import { AccountMongoRepository } from './account'
+import { AccountMongoRepository } from './add'
 import { MongoHelper } from '../helpers/mongoHelper'
 import { MongoMemoryServer } from 'mongodb-memory-server'
 import { AddAccountRepository } from '../../../../data/protocols/db/addAccountRepository'
