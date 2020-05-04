@@ -9,7 +9,7 @@ import { MongoMemoryServer } from 'mongodb-memory-server'
 import { MongoHelper } from '../../infra/db/mongodb/helpers/mongoHelper'
 import { Controller } from '../../presentation/protocols'
 import { serverError } from '../../presentation/helpers'
-import { ComposedValidation, RequiredParamValidation, ConfirmationParamsValidation, EmailValidation } from '../../presentation/helpers/validation'
+import { ValidationCompose, RequiredFieldsValidation, ComparedFieldsValidation, EmailValidation } from '../../presentation/helpers/validation'
 
 interface SutTypes {
   sut: LogControllerDecorator
@@ -22,9 +22,9 @@ const makeSut = (): SutTypes => {
   const bCryptAdapter = new BCryptAdapter(salt)
   const accountMongoRepository = new AccountMongoRepository()
   const dbAddAccount = new DbAddAccount(bCryptAdapter, accountMongoRepository)
-  const validation = new ComposedValidation([
-    new RequiredParamValidation(['name', 'email', 'password', 'passwordConfirmation']),
-    new ConfirmationParamsValidation('password', 'passwordConfirmation'),
+  const validation = new ValidationCompose([
+    new RequiredFieldsValidation(['name', 'email', 'password', 'passwordConfirmation']),
+    new ComparedFieldsValidation('password', 'passwordConfirmation'),
     new EmailValidation(emailValidatorAdapater)
   ])
   const signUpController = new SignUpController(dbAddAccount, validation)

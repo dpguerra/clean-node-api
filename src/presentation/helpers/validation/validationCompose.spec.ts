@@ -1,5 +1,5 @@
 import { Validation } from '../../protocols/validation'
-import { ComposedValidation } from './composedValidation'
+import { ValidationCompose } from './validationCompose'
 
 interface SutTypes {
   sut: Validation<Error>
@@ -21,7 +21,7 @@ const makeSut = (): SutTypes => {
     new ValidationStub()
   ]
   return {
-    sut: new ComposedValidation(validationStubs),
+    sut: new ValidationCompose(validationStubs),
     validationStubs
   }
 }

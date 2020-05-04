@@ -1,7 +1,7 @@
 import { Validation } from '../../protocols/validation'
 import { InvalidParamError } from '../../errors'
 
-export class ConfirmationParamsValidation implements Validation<InvalidParamError> {
+export class ComparedFieldsValidation implements Validation<InvalidParamError> {
   constructor (private readonly field: string, private readonly fieldToCompare: string) { }
   validate (input: Record<string, any>): null | InvalidParamError {
     if (input[this.field] !== input[this.fieldToCompare]) {
