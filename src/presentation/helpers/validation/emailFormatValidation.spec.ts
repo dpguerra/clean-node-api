@@ -1,6 +1,6 @@
 import { Validation } from '../../protocols/validation'
 import { EmailValidator } from '../../protocols/emailValidator'
-import { EmailValidation } from './emailFormatValidation'
+import { EmailFormatValidation } from './emailFormatValidation'
 import { InvalidParamError } from '../../errors'
 
 const fieldName = 'email'
@@ -20,7 +20,7 @@ const makeSut = (): SutTypes => {
   }
   const emailValidatorStub = new EmailValidatorStub()
   return {
-    sut: new EmailValidation(fieldName, emailValidatorStub),
+    sut: new EmailFormatValidation(fieldName, emailValidatorStub),
     emailValidatorStub
   }
 }

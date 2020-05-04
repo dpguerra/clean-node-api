@@ -1,5 +1,5 @@
 import { makeValidationCompose } from './validationCompose'
-import { ValidationCompose, RequiredFieldsValidation, ComparedFieldsValidation, EmailValidation } from '../../presentation/helpers/validation'
+import { ValidationCompose, RequiredFieldsValidation, ComparedFieldsValidation, EmailFormatValidation } from '../../presentation/helpers/validation'
 import { EmailValidator } from '../../presentation/protocols/emailValidator'
 
 jest.mock('../../presentation/helpers/validation/validationCompose')
@@ -19,7 +19,7 @@ describe('Validation Compose Factory', () => {
     expect(ValidationCompose).toHaveBeenCalledWith([
       new RequiredFieldsValidation(['name', 'email', 'password', 'passwordConfirmation']),
       new ComparedFieldsValidation('password', 'passwordConfirmation'),
-      new EmailValidation('email', makeEmailValidator())
+      new EmailFormatValidation('email', makeEmailValidator())
     ])
   })
 })
