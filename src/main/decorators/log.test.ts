@@ -25,7 +25,7 @@ const makeSut = (): SutTypes => {
   const validation = new ValidationCompose([
     new RequiredFieldsValidation(['name', 'email', 'password', 'passwordConfirmation']),
     new ComparedFieldsValidation('password', 'passwordConfirmation'),
-    new EmailValidation(emailValidatorAdapater)
+    new EmailValidation('email', emailValidatorAdapater)
   ])
   const signUpController = new SignUpController(dbAddAccount, validation)
   const dbLogErorRepository = new LogErrorMongoRepository()
