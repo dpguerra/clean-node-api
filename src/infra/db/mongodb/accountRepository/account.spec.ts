@@ -1,7 +1,7 @@
 import { AccountMongoRepository } from './account'
 import { MongoHelper } from '../helpers/mongoHelper'
 import { MongoMemoryServer } from 'mongodb-memory-server'
-import { AddAccountRepository } from '../../../../data/protocols/addAccountRepository'
+import { AddAccountRepository } from '../../../../data/protocols/db/addAccountRepository'
 
 describe('Account MongoDB Repository', () => {
   const mongod = new MongoMemoryServer()

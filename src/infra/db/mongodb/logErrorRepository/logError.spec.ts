@@ -1,6 +1,6 @@
 import { MongoHelper } from '../helpers/mongoHelper'
 import { MongoMemoryServer } from 'mongodb-memory-server'
-import { LogErrorRepository } from '../../../../data/protocols/logErrorRepository'
+import { LogErrorRepository } from '../../../../data/protocols/db/logErrorRepository'
 import { LogErrorMongoRepository } from './logError'
 import { Collection } from 'mongodb'
 
