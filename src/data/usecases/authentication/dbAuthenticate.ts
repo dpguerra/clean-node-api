@@ -20,7 +20,8 @@ export class DBAuthenticate implements Authentication {
     if (!await this.hashCompare.compare(credential.password, account.password)) {
       return await Promise.reject(Error('unauthorized'))
     }
-    const token = await this.encrypter.encrypt(account.id)
+    const { id } = account
+    const token = await this.encrypter.encrypt({ id })
     await this.updateTokenRepository.update(account.id, token)
     return await Promise.resolve(token)
   }
