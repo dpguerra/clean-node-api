@@ -2,6 +2,7 @@ import { DBAuthenticate } from './dbAuthenticate'
 import { AccountModel } from '../../../domain/models/account'
 import { LoadAccountByIdRepository } from '../../protocols/db/loadAccountByIdRepository'
 import { Authentication, AuthenticationModel } from '../../../domain/usecases/authentication'
+import { HashComparer } from '../../protocols/criptography/hashComparer'
 
 const makeFakeAccount = (): AccountModel => ({
   id: 'any_id',
@@ -23,15 +24,27 @@ const makeLoadAccountByIdRepository = (): LoadAccountByIdRepository => {
   return new LoadAccountByIdRepositoryStub()
 }
 
+const makeHashCompare = (): HashComparer => {
+  class HashCompareStub implements HashComparer {
+    compare (password: string, hashedPassword: string): boolean {
+      return true
+    }
+  }
+  return new HashCompareStub()
+}
+
 interface SutTypes {
   sut: Authentication
   loadAccountByIdRepositoryStub: LoadAccountByIdRepository
+  hashCompareStub: HashComparer
 }
 const makeSut = (): SutTypes => {
   const loadAccountByIdRepositoryStub = makeLoadAccountByIdRepository()
+  const hashCompareStub = makeHashCompare()
   return {
-    sut: new DBAuthenticate(loadAccountByIdRepositoryStub),
-    loadAccountByIdRepositoryStub
+    sut: new DBAuthenticate(loadAccountByIdRepositoryStub, hashCompareStub),
+    loadAccountByIdRepositoryStub,
+    hashCompareStub
   }
 }
 
@@ -49,5 +62,13 @@ describe('DBAuthenticate Usecase', () => {
     const credential = makeFakeCredential()
     const promise = sut.auth(credential)
     await expect(promise).rejects.toThrow()
+  })
+  test('should call HashCompare with corrects values', async () => {
+    const { sut, hashCompareStub } = makeSut()
+    const loadSpy = jest.spyOn(hashCompareStub, 'compare')
+    const credential = makeFakeCredential()
+    const account = makeFakeAccount()
+    await sut.auth(credential)
+    expect(loadSpy).toBeCalledWith(credential.password, account.password)
   })
 })
