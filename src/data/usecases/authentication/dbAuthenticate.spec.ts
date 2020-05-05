@@ -146,4 +146,11 @@ describe('DBAuthenticate Usecase', () => {
     const token = await sut.auth(credential)
     expect(updateSpy).toBeCalledWith(account.id, token)
   })
+  test('should throw if UpdateTokenRepository throws', async () => {
+    const { sut, updateTokenRepositoryStub } = makeSut()
+    jest.spyOn(updateTokenRepositoryStub, 'update').mockReturnValueOnce(Promise.reject(new Error()))
+    const credential = makeFakeCredential()
+    const promise = sut.auth(credential)
+    await expect(promise).rejects.toThrow()
+  })
 })
