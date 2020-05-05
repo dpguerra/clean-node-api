@@ -13,7 +13,9 @@ export class DBAuthenticate implements Authentication {
     if (!account) {
       return await Promise.reject(Error('unauthorized'))
     }
-    await this.hashCompare.compare(credential.password, account.password)
+    if (!await this.hashCompare.compare(credential.password, account.password)) {
+      return await Promise.reject(Error('unauthorized'))
+    }
     return await Promise.resolve('valid_token')
   }
 }
