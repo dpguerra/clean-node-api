@@ -4,6 +4,7 @@ import { Authentication, AuthenticationModel } from '../../../domain/usecases/au
 import { HashComparer } from '../../protocols/criptography/hashComparer'
 import { DBAuthenticate } from './dbAuthenticate'
 import { Encrypter } from '../../protocols/criptography/encrypter'
+import { UpdateTokenRepository } from '../../protocols/db/updateTokenRepository'
 
 const makeFakeAccount = (): AccountModel => ({
   id: 'any_id',
@@ -43,21 +44,32 @@ const makeEncrypter = (): Encrypter => {
   return new EncrypterStub()
 }
 
+const makeUpdateTokenRepository = (): UpdateTokenRepository => {
+  class UpdateTokenRepositoryStub implements UpdateTokenRepository {
+    async update (id: string, token: string): Promise<boolean> {
+      return await Promise.resolve(true)
+    }
+  }
+  return new UpdateTokenRepositoryStub()
+}
 interface SutTypes {
   sut: Authentication
   loadAccountByIdRepositoryStub: LoadAccountByIdRepository
   hashCompareStub: HashComparer
   encrypterStub: Encrypter
+  updateTokenRepositoryStub: UpdateTokenRepository
 }
 const makeSut = (): SutTypes => {
   const loadAccountByIdRepositoryStub = makeLoadAccountByIdRepository()
   const hashCompareStub = makeHashCompare()
   const encrypterStub = makeEncrypter()
+  const updateTokenRepositoryStub = makeUpdateTokenRepository()
   return {
-    sut: new DBAuthenticate(loadAccountByIdRepositoryStub, hashCompareStub, encrypterStub),
+    sut: new DBAuthenticate(loadAccountByIdRepositoryStub, hashCompareStub, encrypterStub, updateTokenRepositoryStub),
     loadAccountByIdRepositoryStub,
     hashCompareStub,
-    encrypterStub
+    encrypterStub,
+    updateTokenRepositoryStub
   }
 }
 
@@ -125,5 +137,13 @@ describe('DBAuthenticate Usecase', () => {
     const credential = makeFakeCredential()
     const token = await sut.auth(credential)
     expect(token).toBe('any_valid_token')
+  })
+  test('should call UpdateTokenRepository with corrects values', async () => {
+    const { sut, updateTokenRepositoryStub } = makeSut()
+    const updateSpy = jest.spyOn(updateTokenRepositoryStub, 'update')
+    const credential = makeFakeCredential()
+    const account = makeFakeAccount()
+    const token = await sut.auth(credential)
+    expect(updateSpy).toBeCalledWith(account.id, token)
   })
 })
