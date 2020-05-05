@@ -49,11 +49,22 @@ describe('Account MongoDB Repository', () => {
       const sut = makeSut()
       const account = await sut.loadByEmail('any_email@exemple.com')
       expect(account).toBeTruthy()
+      expect(account?.id).toBeTruthy()
     })
     test('should returns null on fail', async () => {
       const sut = makeSut()
       const account = await sut.loadByEmail('any_email@exemple.com')
       expect(account).toBeFalsy()
+    })
+  })
+  describe('UpdateToken Method', () => {
+    test('should returns void on success', async () => {
+      const { ops } = await accountCollection.insertOne(makeFakeAccount())
+      const { id } = MongoHelper.map(ops[0])
+      const sut = makeSut()
+      await sut.updateToken(id, 'valid_token')
+      const account = await accountCollection.findOne({ _id: id })
+      expect(account.token).toBe('valid_token')
     })
   })
 })
