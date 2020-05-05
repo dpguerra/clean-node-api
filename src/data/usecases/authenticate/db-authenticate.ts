@@ -6,14 +6,14 @@ import { UpdateTokenRepository } from '../../protocols/db/update-token-repositor
 
 export class DBAuthenticate implements Authenticate {
   constructor (
-    private readonly loadAccountByIdRepository: LoadAccountByEmailRepository,
+    private readonly loadAccountByEmailRepository: LoadAccountByEmailRepository,
     private readonly hashCompare: HashComparer,
     private readonly encrypter: Encrypter,
     private readonly updateTokenRepository: UpdateTokenRepository
   ) { }
 
   async auth (credential: AuthenticateModel): Promise<string> {
-    const account = await this.loadAccountByIdRepository.loadByEmail(credential.email)
+    const account = await this.loadAccountByEmailRepository.loadByEmail(credential.email)
     if (!account) {
       return await Promise.reject(Error('unauthorized'))
     }
