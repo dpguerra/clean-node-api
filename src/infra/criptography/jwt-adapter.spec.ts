@@ -27,4 +27,9 @@ describe('JWT Adapter', () => {
     const promise = sut.encrypt({ id: 'any_id' })
     await expect(promise).rejects.toThrow()
   })
+  test('should returns a valid token on success', async () => {
+    const sut = makeSut()
+    const token = await sut.encrypt({ id: 'any_id' })
+    expect(token).toBe('valid_token')
+  })
 })
