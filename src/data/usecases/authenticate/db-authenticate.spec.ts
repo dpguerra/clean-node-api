@@ -19,7 +19,7 @@ const makeFakeCredential = (): AuthenticateModel => ({
 
 const makeLoadAccountByEmailRepository = (): LoadAccountByEmailRepository => {
   class LoadAccountByEmailRepositoryStub implements LoadAccountByEmailRepository {
-    async load (email: string): Promise<AccountModel | null> {
+    async loadByEmail (email: string): Promise<AccountModel | null> {
       return await Promise.resolve(makeFakeAccount())
     }
   }
@@ -76,32 +76,32 @@ const makeSut = (): SutTypes => {
 describe('DBAuthenticate Usecase', () => {
   test('should call LoadAccountByEmailRepository with correct value', async () => {
     const { sut, loadAccountByIdRepositoryStub } = makeSut()
-    const loadSpy = jest.spyOn(loadAccountByIdRepositoryStub, 'load')
+    const loadByEmailSpy = jest.spyOn(loadAccountByIdRepositoryStub, 'loadByEmail')
     const credential = makeFakeCredential()
     await sut.auth(credential)
-    expect(loadSpy).toBeCalledWith(credential.email)
+    expect(loadByEmailSpy).toBeCalledWith(credential.email)
   })
   test('should throw if LoadAccountByEmailRepository throws', async () => {
     const { sut, loadAccountByIdRepositoryStub } = makeSut()
-    jest.spyOn(loadAccountByIdRepositoryStub, 'load').mockReturnValueOnce(Promise.reject(new Error()))
+    jest.spyOn(loadAccountByIdRepositoryStub, 'loadByEmail').mockReturnValueOnce(Promise.reject(new Error()))
     const credential = makeFakeCredential()
     const promise = sut.auth(credential)
     await expect(promise).rejects.toThrow()
   })
   test('should reject if LoadAccountByEmailRepository returns no account', async () => {
     const { sut, loadAccountByIdRepositoryStub } = makeSut()
-    jest.spyOn(loadAccountByIdRepositoryStub, 'load').mockReturnValueOnce(Promise.resolve(null))
+    jest.spyOn(loadAccountByIdRepositoryStub, 'loadByEmail').mockReturnValueOnce(Promise.resolve(null))
     const credential = makeFakeCredential()
     const token = sut.auth(credential)
     await expect(token).rejects.toEqual(Error('unauthorized'))
   })
   test('should call HashCompare with corrects values', async () => {
     const { sut, hashCompareStub } = makeSut()
-    const loadSpy = jest.spyOn(hashCompareStub, 'compare')
+    const loadByEmailSpy = jest.spyOn(hashCompareStub, 'compare')
     const credential = makeFakeCredential()
     const account = makeFakeAccount()
     await sut.auth(credential)
-    expect(loadSpy).toBeCalledWith(credential.password, account.password)
+    expect(loadByEmailSpy).toBeCalledWith(credential.password, account.password)
   })
   test('should throw if HashCompare throws', async () => {
     const { sut, hashCompareStub } = makeSut()
