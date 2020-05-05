@@ -22,7 +22,7 @@ export class DBAuthenticate implements Authenticate {
     }
     const { id } = account
     const token = await this.encrypter.encrypt({ id })
-    await this.updateTokenRepository.update(account.id, token)
+    await this.updateTokenRepository.updateToken(account.id, token)
     return await Promise.resolve(token)
   }
 }
