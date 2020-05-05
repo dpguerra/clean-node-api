@@ -51,4 +51,9 @@ describe('BCrypt Adapter', () => {
     const result = await sut.compare('any_password', 'any_hashed_password')
     expect(result).toBeFalsy()
   })
+  test('should return true if bcrypt.compare succeds', async () => {
+    const sut = makeSut()
+    const result = await sut.compare('any_password', 'any_hashed_password')
+    expect(result).toBeTruthy()
+  })
 })
