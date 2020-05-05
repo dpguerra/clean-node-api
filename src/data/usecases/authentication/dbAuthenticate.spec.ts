@@ -26,7 +26,7 @@ const makeLoadAccountByIdRepository = (): LoadAccountByIdRepository => {
 
 const makeHashCompare = (): HashComparer => {
   class HashCompareStub implements HashComparer {
-    compare (password: string, hashedPassword: string): boolean {
+    async compare (password: string, hashedPassword: string): Promise<boolean> {
       return true
     }
   }
@@ -67,8 +67,8 @@ describe('DBAuthenticate Usecase', () => {
     const { sut, loadAccountByIdRepositoryStub } = makeSut()
     jest.spyOn(loadAccountByIdRepositoryStub, 'load').mockReturnValueOnce(Promise.resolve(null))
     const credential = makeFakeCredential()
-    const promise = sut.auth(credential)
-    await expect(promise).rejects.toEqual(Error('unauthorized'))
+    const token = sut.auth(credential)
+    await expect(token).rejects.toEqual(Error('unauthorized'))
   })
   test('should call HashCompare with corrects values', async () => {
     const { sut, hashCompareStub } = makeSut()
@@ -77,5 +77,12 @@ describe('DBAuthenticate Usecase', () => {
     const account = makeFakeAccount()
     await sut.auth(credential)
     expect(loadSpy).toBeCalledWith(credential.password, account.password)
+  })
+  test('should throw if HashCompare throws', async () => {
+    const { sut, hashCompareStub } = makeSut()
+    jest.spyOn(hashCompareStub, 'compare').mockReturnValueOnce(Promise.reject(new Error()))
+    const credential = makeFakeCredential()
+    const promise = sut.auth(credential)
+    await expect(promise).rejects.toThrow()
   })
 })
