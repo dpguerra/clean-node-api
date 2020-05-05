@@ -1,8 +1,8 @@
-import { DBAuthenticate } from './dbAuthenticate'
 import { AccountModel } from '../../../domain/models/account'
 import { LoadAccountByIdRepository } from '../../protocols/db/loadAccountByIdRepository'
 import { Authentication, AuthenticationModel } from '../../../domain/usecases/authentication'
 import { HashComparer } from '../../protocols/criptography/hashComparer'
+import { DBAuthenticate } from './dbAuthenticate'
 
 const makeFakeAccount = (): AccountModel => ({
   id: 'any_id',
@@ -84,5 +84,12 @@ describe('DBAuthenticate Usecase', () => {
     const credential = makeFakeCredential()
     const promise = sut.auth(credential)
     await expect(promise).rejects.toThrow()
+  })
+  test('should reject if HashCompare returns false', async () => {
+    const { sut, hashCompareStub } = makeSut()
+    jest.spyOn(hashCompareStub, 'compare').mockReturnValueOnce(Promise.resolve(false))
+    const credential = makeFakeCredential()
+    const token = sut.auth(credential)
+    await expect(token).rejects.toEqual(Error('unauthorized'))
   })
 })
