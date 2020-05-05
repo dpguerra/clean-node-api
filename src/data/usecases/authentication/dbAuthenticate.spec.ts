@@ -17,7 +17,7 @@ const makeFakeCredential = (): AuthenticationModel => ({
 
 const makeLoadAccountByIdRepository = (): LoadAccountByIdRepository => {
   class LoadAccountByIdRepositoryStub implements LoadAccountByIdRepository {
-    async load (email: string): Promise<AccountModel> {
+    async load (email: string): Promise<AccountModel | null> {
       return await Promise.resolve(makeFakeAccount())
     }
   }
@@ -62,6 +62,13 @@ describe('DBAuthenticate Usecase', () => {
     const credential = makeFakeCredential()
     const promise = sut.auth(credential)
     await expect(promise).rejects.toThrow()
+  })
+  test('should reject if LoadAccountByIdRepository returns no account', async () => {
+    const { sut, loadAccountByIdRepositoryStub } = makeSut()
+    jest.spyOn(loadAccountByIdRepositoryStub, 'load').mockReturnValueOnce(Promise.resolve(null))
+    const credential = makeFakeCredential()
+    const promise = sut.auth(credential)
+    await expect(promise).rejects.toEqual(Error('unauthorized'))
   })
   test('should call HashCompare with corrects values', async () => {
     const { sut, hashCompareStub } = makeSut()
