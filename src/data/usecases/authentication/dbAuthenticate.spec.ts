@@ -120,4 +120,10 @@ describe('DBAuthenticate Usecase', () => {
     const promise = sut.auth(credential)
     await expect(promise).rejects.toThrow()
   })
+  test('should return a valid token if succeds', async () => {
+    const { sut } = makeSut()
+    const credential = makeFakeCredential()
+    const token = await sut.auth(credential)
+    expect(token).toBe('any_valid_token')
+  })
 })
