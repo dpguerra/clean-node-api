@@ -10,7 +10,10 @@ export class DBAuthenticate implements Authentication {
 
   async auth (credential: AuthenticationModel): Promise<string> {
     const account = await this.loadAccountByIdRepository.load(credential.email)
+    if (!account) {
+      return await Promise.reject(Error('unauthorized'))
+    }
     this.hashCompare.compare(credential.password, account.password)
-    return await Promise.resolve('any_token')
+    return await Promise.resolve('valid_token')
   }
 }
