@@ -1,10 +1,10 @@
 import { badRequest, serverError, ok, unauthorized } from '../../helpers'
 import { InvalidUserOrPassword } from '../../errors'
-import { Authentication, Controller, HttpRequest, HttpResponse } from './login-controller-protocols'
+import { Authenticate, Controller, HttpRequest, HttpResponse } from './login-controller-protocols'
 import { Validation } from '../../protocols/validation'
 
 export class LogInController implements Controller {
-  constructor (private readonly authentication: Authentication, private readonly validation: Validation<Error>) { }
+  constructor (private readonly authenticate: Authenticate, private readonly validation: Validation<Error>) { }
 
   async handle (request: HttpRequest): Promise<HttpResponse> {
     try {
@@ -13,7 +13,7 @@ export class LogInController implements Controller {
         return badRequest(validationResult)
       }
       const { email, password } = request.body
-      return ok(await this.authentication.auth({ email, password }))
+      return ok(await this.authenticate.auth({ email, password }))
     } catch (error) {
       if (error === 'unauthorized') {
         return unauthorized(new InvalidUserOrPassword())
