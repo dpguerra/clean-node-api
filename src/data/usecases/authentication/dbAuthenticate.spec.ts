@@ -3,6 +3,7 @@ import { LoadAccountByIdRepository } from '../../protocols/db/loadAccountByIdRep
 import { Authentication, AuthenticationModel } from '../../../domain/usecases/authentication'
 import { HashComparer } from '../../protocols/criptography/hashComparer'
 import { DBAuthenticate } from './dbAuthenticate'
+import { Encrypter } from '../../protocols/criptography/encrypter'
 
 const makeFakeAccount = (): AccountModel => ({
   id: 'any_id',
@@ -33,18 +34,30 @@ const makeHashCompare = (): HashComparer => {
   return new HashCompareStub()
 }
 
+const makeEncrypter = (): Encrypter => {
+  class EncrypterStub implements Encrypter {
+    async encrypt (value: string): Promise<string> {
+      return await Promise.resolve('any_valid_token')
+    }
+  }
+  return new EncrypterStub()
+}
+
 interface SutTypes {
   sut: Authentication
   loadAccountByIdRepositoryStub: LoadAccountByIdRepository
   hashCompareStub: HashComparer
+  encrypterStub: Encrypter
 }
 const makeSut = (): SutTypes => {
   const loadAccountByIdRepositoryStub = makeLoadAccountByIdRepository()
   const hashCompareStub = makeHashCompare()
+  const encrypterStub = makeEncrypter()
   return {
-    sut: new DBAuthenticate(loadAccountByIdRepositoryStub, hashCompareStub),
+    sut: new DBAuthenticate(loadAccountByIdRepositoryStub, hashCompareStub, encrypterStub),
     loadAccountByIdRepositoryStub,
-    hashCompareStub
+    hashCompareStub,
+    encrypterStub
   }
 }
 
@@ -91,5 +104,13 @@ describe('DBAuthenticate Usecase', () => {
     const credential = makeFakeCredential()
     const token = sut.auth(credential)
     await expect(token).rejects.toEqual(Error('unauthorized'))
+  })
+  test('should call Encrypter with correct value', async () => {
+    const { sut, encrypterStub } = makeSut()
+    const encryptSpy = jest.spyOn(encrypterStub, 'encrypt')
+    const credential = makeFakeCredential()
+    const account = makeFakeAccount()
+    await sut.auth(credential)
+    expect(encryptSpy).toBeCalledWith(account.id)
   })
 })
