@@ -136,15 +136,16 @@ describe('DBAuthenticate Usecase', () => {
   test('should return a valid token if succeds', async () => {
     const { sut } = makeSut()
     const credential = makeFakeCredential()
-    const token = await sut.auth(credential)
-    expect(token).toBe('any_valid_token')
+    const result = await sut.auth(credential)
+    const token = 'any_valid_token'
+    expect(result).toEqual({ token })
   })
   test('should call UpdateTokenRepository with corrects values', async () => {
     const { sut, updateTokenRepositoryStub } = makeSut()
     const updateTokenSpy = jest.spyOn(updateTokenRepositoryStub, 'updateToken')
     const credential = makeFakeCredential()
     const account = makeFakeAccount()
-    const token = await sut.auth(credential)
+    const { token } = await sut.auth(credential)
     expect(updateTokenSpy).toBeCalledWith(account.id, token)
   })
   test('should throw if UpdateTokenRepository throws', async () => {
