@@ -3,6 +3,7 @@ import { serverError, unauthorized, ok, badRequest } from '../../helpers'
 import { InvalidUserOrPassword } from '../../errors'
 import { Authenticate, AuthenticateModel, HttpRequest } from './login-controller-protocols'
 import { Validation } from '../../protocols/validation'
+import { TokenModel } from '../../../domain/usecases/authenticate'
 
 const makeValidation = (): Validation<Error> => {
   class ValidationStub implements Validation<Error> {
@@ -15,8 +16,8 @@ const makeValidation = (): Validation<Error> => {
 
 const makeAuthenticate = (): Authenticate => {
   class AuthenticateStub implements Authenticate {
-    async auth (credentials: AuthenticateModel): Promise<string> {
-      return await Promise.resolve('valid_token')
+    async auth (credentials: AuthenticateModel): Promise<TokenModel> {
+      return await Promise.resolve({ token: 'valid_token' })
     }
   }
   return new AuthenticateStub()
@@ -91,6 +92,6 @@ describe('LogIn Controller', () => {
   test('should returns 200 and a token if valid credentials are passed', async () => {
     const { sut } = makeSut()
     const response = await sut.handle(makeFakeRequest())
-    expect(response).toEqual(ok('valid_token'))
+    expect(response).toEqual(ok({ token: 'valid_token' }))
   })
 })
