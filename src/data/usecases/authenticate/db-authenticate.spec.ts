@@ -5,6 +5,7 @@ import { HashComparer } from '../../protocols/criptography/hash-comparer'
 import { DBAuthenticate } from './db-authenticate'
 import { Encrypter } from '../../protocols/criptography/encrypter'
 import { UpdateTokenRepository } from '../../protocols/db/update-token-repository'
+import { InvalidUserOrPassword } from '../../../presentation/errors'
 
 const makeFakeAccount = (): AccountModel => ({
   id: 'any_id',
@@ -93,7 +94,7 @@ describe('DBAuthenticate Usecase', () => {
     jest.spyOn(loadAccountByIdRepositoryStub, 'loadByEmail').mockReturnValueOnce(Promise.resolve(null))
     const credential = makeFakeCredential()
     const token = sut.auth(credential)
-    await expect(token).rejects.toEqual(Error('unauthorized'))
+    await expect(token).rejects.toEqual(new InvalidUserOrPassword())
   })
   test('should call HashCompare with corrects values', async () => {
     const { sut, hashCompareStub } = makeSut()
@@ -115,7 +116,7 @@ describe('DBAuthenticate Usecase', () => {
     jest.spyOn(hashCompareStub, 'compare').mockReturnValueOnce(Promise.resolve(false))
     const credential = makeFakeCredential()
     const token = sut.auth(credential)
-    await expect(token).rejects.toEqual(Error('unauthorized'))
+    await expect(token).rejects.toEqual((new InvalidUserOrPassword()))
   })
   test('should call Encrypter with correct value', async () => {
     const { sut, encrypterStub } = makeSut()

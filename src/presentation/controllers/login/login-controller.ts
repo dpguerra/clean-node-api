@@ -15,7 +15,7 @@ export class LogInController implements Controller {
       const { email, password } = request.body
       return ok(await this.authenticate.auth({ email, password }))
     } catch (error) {
-      if (error === 'unauthorized') {
+      if (error.name === 'InvalidUserOrPassword') {
         return unauthorized(new InvalidUserOrPassword())
       }
       console.error(error)
