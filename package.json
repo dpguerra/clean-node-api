@@ -3,6 +3,9 @@
   "version": "0.2.0",
   "description": "Aulas de Clean Archtecture",
   "main": "index.js",
+  "engines": {
+    "node": "12.16.3"
+  },
   "scripts": {
     "start": "node dist/main/server.js",
     "build": "rimraf dist && tsc",
