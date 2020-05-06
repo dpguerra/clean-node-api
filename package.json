@@ -4,9 +4,9 @@
   "description": "Aulas de Clean Archtecture",
   "main": "index.js",
   "scripts": {
-    "dev": "node dist/main/server.js",
+    "start": "node dist/main/server.js",
     "build": "rimraf dist && tsc",
-    "start": "sucrase-node src/main/server.ts",
+    "dev": "sucrase-node src/main/server.ts",
     "test": "jest --passWithNoTests --silent --noStackTrace --runInBand",
     "test:verbose": "jest --passWithNoTests --runInBand",
     "test:unit": "npm test -- --watch -c jest-unit.config.js",
