@@ -1,3 +1,4 @@
+import env from '../../config/env'
 import { BCryptAdapter } from '../../../infra/criptography/bcrypt-adapter'
 import { AccountMongoRepository } from '../../../infra/db/mongodb/account-repository/account-mongo-repository'
 import { Controller } from '../../../presentation/protocols/controller'
@@ -12,7 +13,7 @@ export const makeLogInController = (): Controller => {
   const salt = 12
   const accountMongoRepository = new AccountMongoRepository()
   const hashCompare = new BCryptAdapter(salt)
-  const enctrypter = new JwtAdapter('')
+  const enctrypter = new JwtAdapter(env.jwtSecret)
   const dbAuthenticate = new DBAuthenticate(accountMongoRepository, hashCompare, enctrypter, accountMongoRepository)
   const loginController = new LogInController(dbAuthenticate, makeValidationCompose())
   const logErrorMongoRepository = new LogErrorMongoRepository()
