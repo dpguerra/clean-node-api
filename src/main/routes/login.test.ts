@@ -2,9 +2,12 @@ import request from 'supertest'
 import app from '../config/app'
 import { MongoMemoryServer } from 'mongodb-memory-server'
 import { MongoHelper } from '../../infra/db/mongodb/helpers/mongo-helper'
+import { Collection } from 'mongodb'
+import { hash } from 'bcrypt'
 
-describe('SignUp Routes', () => {
+describe('Login Routes', () => {
   const mongod = new MongoMemoryServer()
+  let accountCollection: Collection
 
   beforeAll(async () => {
     const uri = await mongod.getUri()
@@ -17,19 +20,52 @@ describe('SignUp Routes', () => {
   })
 
   beforeEach(async () => {
-    const accountCollection = await MongoHelper.getCollection('accounts')
+    accountCollection = await MongoHelper.getCollection('accounts')
     await accountCollection.deleteMany({})
   })
-
-  test('should return an account on success', async () => {
-    await request(app)
-      .post('/api/signup')
-      .send({
+  describe('POST /signup', () => {
+    test('should return an account on success', async () => {
+      await request(app)
+        .post('/api/signup')
+        .send({
+          name: 'valid_name',
+          email: 'valid_email@exemple.com',
+          password: 'valid_password',
+          passwordConfirmation: 'valid_password'
+        })
+        .expect(201)
+    })
+  })
+  describe('POST /login', () => {
+    test('should return an account on success', async () => {
+      const password = await hash('valid_password', 12)
+      await accountCollection.insertOne({
         name: 'valid_name',
         email: 'valid_email@exemple.com',
-        password: 'valid_password',
-        passwordConfirmation: 'valid_password'
+        password
       })
-      .expect(201)
+      await request(app)
+        .post('/api/login')
+        .send({
+          email: 'valid_email@exemple.com',
+          password: 'valid_password'
+        })
+        .expect(200)
+    })
+    test('should return an error on fail', async () => {
+      const password = await hash('valid_password', 12)
+      await accountCollection.insertOne({
+        name: 'valid_name',
+        email: 'valid_email@exemple.com',
+        password
+      })
+      await request(app)
+        .post('/api/login')
+        .send({
+          email: 'valid_email@exemple.com',
+          password: 'invalid_password'
+        })
+        .expect(401)
+    })
   })
 })
