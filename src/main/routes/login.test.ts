@@ -21,6 +21,7 @@ describe('Login Routes', () => {
 
   beforeEach(async () => {
     accountCollection = await MongoHelper.getCollection('accounts')
+    await accountCollection.createIndex({ email: 1 }, { unique: true })
     await accountCollection.deleteMany({})
   })
   describe('POST /signup', () => {
@@ -34,6 +35,23 @@ describe('Login Routes', () => {
           passwordConfirmation: 'valid_password'
         })
         .expect(200)
+    })
+    test('should return an error if email exists', async () => {
+      const password = await hash('valid_password', 12)
+      await accountCollection.insertOne({
+        name: 'valid_name',
+        email: 'valid_email@exemple.com',
+        password
+      })
+      await request(app)
+        .post('/api/signup')
+        .send({
+          name: 'valid_name',
+          email: 'valid_email@exemple.com',
+          password: 'valid_password',
+          passwordConfirmation: 'valid_password'
+        })
+        .expect(403)
     })
   })
   describe('POST /login', () => {

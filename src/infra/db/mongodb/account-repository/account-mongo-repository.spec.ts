@@ -20,6 +20,7 @@ describe('Account MongoDB Repository', () => {
 
   beforeEach(async () => {
     accountCollection = await MongoHelper.getCollection('accounts')
+    await accountCollection.createIndex({ email: 1 }, { unique: true })
     await accountCollection.deleteMany({})
   })
 
