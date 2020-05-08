@@ -1,7 +1,7 @@
 import { SignUpController } from './signup-controller'
 import { AccountModel, AddAccount, AddAccountModel, Authenticate, AuthenticateModel } from './signup-controller-protocols'
 import { HttpRequest } from '../../protocols'
-import { serverError, badRequest } from '../../helpers'
+import { serverError, badRequest, ok } from '../../helpers'
 import { Validation } from '../../protocols/validation'
 import { TokenModel } from '../../../domain/usecases/authenticate'
 
@@ -117,10 +117,9 @@ describe('SignUp Controller', () => {
     await sut.handle(request)
     expect(authSpy).toHaveBeenCalledWith({ email, password })
   })
-  // test('should return code 200 if all values passed', async () => {
-  //   const { sut } = makeSut()
-  //   const request = makeFakeRequest()
-  //   const response = await sut.handle(request)
-  //   expect(response).toEqual(created(makeFakeAccount()))
-  // })
+  test('should returns 200 and a token if valid credentials are passed', async () => {
+    const { sut } = makeSut()
+    const response = await sut.handle(makeFakeRequest())
+    expect(response).toEqual(ok({ token: 'valid_token' }))
+  })
 })
