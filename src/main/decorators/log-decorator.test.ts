@@ -1,3 +1,4 @@
+import env from '../config/env'
 import { EmailValidatorAdapter } from '../adapters/email-validator-adapater'
 import { BCryptAdapter } from '../../infra/criptography/bcrypt-adapter'
 import { AccountMongoRepository } from '../../infra/db/mongodb/account-repository/account-mongo-repository'
@@ -10,6 +11,8 @@ import { MongoHelper } from '../../infra/db/mongodb/helpers/mongo-helper'
 import { Controller } from '../../presentation/protocols'
 import { serverError } from '../../presentation/helpers'
 import { ValidationCompose, RequiredFieldsValidation, ComparedFieldsValidation, EmailFormatValidation } from '../../presentation/helpers/validation'
+import { DBAuthenticate } from '../../data/usecases/authenticate/db-authenticate'
+import { JwtAdapter } from '../../infra/criptography/jwt-adapater'
 
 interface SutTypes {
   sut: LogControllerDecorator
@@ -27,7 +30,10 @@ const makeSut = (): SutTypes => {
     new ComparedFieldsValidation('password', 'passwordConfirmation'),
     new EmailFormatValidation('email', emailValidatorAdapater)
   ])
-  const signUpController = new SignUpController(dbAddAccount, validation)
+  const hashCompare = new BCryptAdapter(salt)
+  const enctrypter = new JwtAdapter(env.jwtSecret)
+  const dbAuthenticate = new DBAuthenticate(accountMongoRepository, hashCompare, enctrypter, accountMongoRepository)
+  const signUpController = new SignUpController(dbAddAccount, validation, dbAuthenticate)
   const dbLogErorRepository = new LogErrorMongoRepository()
   return {
     sut: new LogControllerDecorator(signUpController, dbLogErorRepository),

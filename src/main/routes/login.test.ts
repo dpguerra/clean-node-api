@@ -33,7 +33,7 @@ describe('Login Routes', () => {
           password: 'valid_password',
           passwordConfirmation: 'valid_password'
         })
-        .expect(201)
+        .expect(200)
     })
   })
   describe('POST /login', () => {
