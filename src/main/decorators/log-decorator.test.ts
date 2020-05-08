@@ -56,6 +56,7 @@ describe('Log Controller Decorator', () => {
 
   beforeEach(async () => {
     const accountCollection = await MongoHelper.getCollection('accounts')
+    await accountCollection.createIndex({ email: 1 }, { unique: true })
     await accountCollection.deleteMany({})
   })
   test('should returns un new id on success', async () => {

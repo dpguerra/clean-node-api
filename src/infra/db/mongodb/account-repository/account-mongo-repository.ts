@@ -4,12 +4,17 @@ import { AccountModel } from '../../../../domain/models/account'
 import { MongoHelper } from '../helpers/mongo-helper'
 import { LoadAccountByEmailRepository } from '../../../../data/protocols/db/load-account-by-email-repository'
 import { UpdateTokenRepository } from '../../../../data/protocols/db/update-token-repository'
+import { EmailAlreadyInUse } from '../../../../presentation/errors'
 
 export class AccountMongoRepository implements AddAccountRepository, LoadAccountByEmailRepository, UpdateTokenRepository {
   async add (account: AddAccountModel): Promise<AccountModel> {
     const accountCollection = await MongoHelper.getCollection('accounts')
-    const { ops } = await accountCollection.insertOne(account)
-    return MongoHelper.map(ops[0])
+    try {
+      const { ops } = await accountCollection.insertOne(account)
+      return MongoHelper.map(ops[0])
+    } catch (error) {
+      return await Promise.reject(new EmailAlreadyInUse(account.email))
+    }
   }
 
   async loadByEmail (email: string): Promise<AccountModel | null> {

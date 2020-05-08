@@ -6,6 +6,8 @@ MongoHelper.connect(env.mongoUrl)
     async () => {
       const app = (await import('./config/app')).default
       app.listen(env.port, () => console.log(`Listening on http://localhost:${env.port}...`))
+      const accountCollection = await MongoHelper.getCollection('accounts')
+      await accountCollection.createIndex({ email: 1 }, { unique: true })
     }
   )
   .catch(console.error)

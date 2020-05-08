@@ -1,6 +1,7 @@
 import { Authenticate, Controller, HttpResponse, HttpRequest, AddAccount } from './signup-controller-protocols'
-import { badRequest, serverError, ok } from '../../helpers'
+import { badRequest, serverError, ok, forbiden } from '../../helpers'
 import { Validation } from '../../protocols/validation'
+import { EmailAlreadyInUse } from '../../errors'
 
 export class SignUpController implements Controller {
   constructor (private readonly addAccount: AddAccount, private readonly validation: Validation<Error>, private readonly authenticate: Authenticate) {}
@@ -15,6 +16,9 @@ export class SignUpController implements Controller {
       await this.addAccount.add({ name, email, password })
       return ok(await this.authenticate.auth({ email, password }))
     } catch (error) {
+      if (error.name === 'EmailAlreadyInUse') {
+        return forbiden(new EmailAlreadyInUse(request.body.email))
+      }
       console.error(error)
       return serverError(error)
     }
