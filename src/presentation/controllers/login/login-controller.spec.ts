@@ -1,9 +1,9 @@
 import { LogInController } from './login-controller'
 import { serverError, unauthorized, ok, badRequest } from '../../helpers'
-import { InvalidUserOrPassword } from '../../errors'
+import { InvalidUserOrPassword } from '../../../domain/usecases/authenticate/invalid-user-or-email-error'
 import { Authenticate, AuthenticateModel, HttpRequest } from './login-controller-protocols'
 import { Validation } from '../../protocols/validation'
-import { TokenModel } from '../../../domain/usecases/authenticate'
+import { TokenModel } from '../../../domain/usecases/authenticate/authenticate-usecase'
 
 const makeValidation = (): Validation<Error> => {
   class ValidationStub implements Validation<Error> {

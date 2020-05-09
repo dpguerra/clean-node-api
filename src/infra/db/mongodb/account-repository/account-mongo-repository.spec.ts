@@ -1,7 +1,7 @@
 import { AccountMongoRepository } from './account-mongo-repository'
 import { MongoHelper } from '../helpers/mongo-helper'
 import { MongoMemoryServer } from 'mongodb-memory-server'
-import { AddAccountModel } from '../../../../domain/usecases/account'
+import { AddAccountModel } from '../../../../domain/usecases/account/account-usecase'
 import { Collection } from 'mongodb'
 
 describe('Account MongoDB Repository', () => {

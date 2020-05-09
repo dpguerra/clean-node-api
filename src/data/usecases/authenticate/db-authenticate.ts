@@ -1,9 +1,9 @@
-import { Authenticate, AuthenticateModel, TokenModel } from '../../../domain/usecases/authenticate'
+import { Authenticate, AuthenticateModel, TokenModel } from '../../../domain/usecases/authenticate/authenticate-usecase'
 import { LoadAccountByEmailRepository } from '../../protocols/db/load-account-by-email-repository'
 import { HashComparer } from '../../protocols/criptography/hash-comparer'
 import { Encrypter } from '../../protocols/criptography/encrypter'
 import { UpdateTokenRepository } from '../../protocols/db/update-token-repository'
-import { InvalidUserOrPassword } from '../../../presentation/errors'
+import { InvalidUserOrPassword } from '../../../domain/usecases/authenticate/invalid-user-or-email-error'
 
 export class DBAuthenticate implements Authenticate {
   constructor (

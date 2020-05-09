@@ -3,7 +3,7 @@ import { AccountModel, AddAccount, AddAccountModel, Authenticate, AuthenticateMo
 import { HttpRequest } from '../../protocols'
 import { serverError, badRequest, ok } from '../../helpers'
 import { Validation } from '../../protocols/validation'
-import { TokenModel } from '../../../domain/usecases/authenticate'
+import { TokenModel } from '../../../domain/usecases/authenticate/authenticate-usecase'
 
 const makeValidation = (): Validation<Error> => {
   class ValidationStub implements Validation<Error> {

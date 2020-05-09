@@ -1,11 +1,11 @@
 import { AccountModel } from '../../../domain/models/account'
 import { LoadAccountByEmailRepository } from '../../protocols/db/load-account-by-email-repository'
-import { Authenticate, AuthenticateModel } from '../../../domain/usecases/authenticate'
+import { Authenticate, AuthenticateModel } from '../../../domain/usecases/authenticate/authenticate-usecase'
 import { HashComparer } from '../../protocols/criptography/hash-comparer'
 import { DBAuthenticate } from './db-authenticate'
 import { Encrypter } from '../../protocols/criptography/encrypter'
 import { UpdateTokenRepository } from '../../protocols/db/update-token-repository'
-import { InvalidUserOrPassword } from '../../../presentation/errors'
+import { InvalidUserOrPassword } from '../../../domain/usecases/authenticate/invalid-user-or-email-error'
 
 const makeFakeAccount = (): AccountModel => ({
   id: 'any_id',
