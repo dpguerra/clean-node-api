@@ -11,6 +11,8 @@ describe('Account MongoDB Repository', () => {
   beforeAll(async () => {
     const uri = await mongod.getUri()
     await MongoHelper.connect(uri)
+    accountCollection = await MongoHelper.getCollection('accounts')
+    await accountCollection.createIndex({ email: 1 }, { unique: true })
   })
 
   afterAll(async () => {
@@ -19,8 +21,6 @@ describe('Account MongoDB Repository', () => {
   })
 
   beforeEach(async () => {
-    accountCollection = await MongoHelper.getCollection('accounts')
-    await accountCollection.createIndex({ email: 1 }, { unique: true })
     await accountCollection.deleteMany({})
   })
 

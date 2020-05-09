@@ -13,6 +13,7 @@ import { serverError } from '../../presentation/helpers'
 import { ValidationCompose, RequiredFieldsValidation, ComparedFieldsValidation, EmailFormatValidation } from '../../presentation/helpers/validation'
 import { DBAuthenticate } from '../../data/usecases/authenticate/db-authenticate'
 import { JwtAdapter } from '../../infra/criptography/jwt-adapater'
+import { Collection } from 'mongodb'
 
 interface SutTypes {
   sut: LogControllerDecorator
@@ -43,10 +44,13 @@ const makeSut = (): SutTypes => {
 
 describe('Log Controller Decorator', () => {
   const mongod = new MongoMemoryServer()
+  let accountCollection: Collection
 
   beforeAll(async () => {
     const uri = await mongod.getUri()
     await MongoHelper.connect(uri)
+    accountCollection = await MongoHelper.getCollection('accounts')
+    await accountCollection.createIndex({ email: 1 }, { unique: true })
   })
 
   afterAll(async () => {
@@ -55,8 +59,6 @@ describe('Log Controller Decorator', () => {
   })
 
   beforeEach(async () => {
-    const accountCollection = await MongoHelper.getCollection('accounts')
-    await accountCollection.createIndex({ email: 1 }, { unique: true })
     await accountCollection.deleteMany({})
   })
   test('should returns un new id on success', async () => {
