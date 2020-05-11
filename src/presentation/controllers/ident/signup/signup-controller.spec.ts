@@ -1,9 +1,8 @@
 import { SignUpController } from './signup-controller'
-import { AccountModel, AddAccount, AddAccountModel, Authenticate, AuthenticateModel } from './signup-controller-protocols'
-import { HttpRequest } from '../../protocols'
-import { serverError, badRequest, ok } from '../../helpers'
-import { Validation } from '../../protocols/validation'
-import { TokenModel } from '../../../domain/usecases/authenticate/authenticate-usecase'
+import { AccountModel, AddAccount, AddAccountModel, Authenticate, AuthenticateModel, Validation } from './signup-controller-protocols'
+import { HttpRequest } from '../../../protocols'
+import { serverError, badRequest, ok } from '../../../helpers'
+import { TokenModel } from '../../../../domain/usecases/authenticate/authenticate-usecase'
 
 const makeValidation = (): Validation<Error> => {
   class ValidationStub implements Validation<Error> {
