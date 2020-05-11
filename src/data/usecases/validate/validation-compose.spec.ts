@@ -1,4 +1,4 @@
-import { Validation } from '../../protocols/validation'
+import { Validation } from '../../../domain/usecases/validate/validation'
 import { ValidationCompose } from './validation-compose'
 
 interface SutTypes {

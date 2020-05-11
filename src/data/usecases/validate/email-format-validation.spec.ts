@@ -1,7 +1,6 @@
-import { Validation } from '../../protocols/validation'
-import { EmailValidator } from '../../protocols/email-validator'
 import { EmailFormatValidation } from './email-format-validation'
-import { InvalidParamError } from '../../errors'
+import { InvalidParamError } from '../../../presentation/errors'
+import { Validation, EmailValidation } from '../../../domain/usecases/validate/validation'
 
 const fieldName = 'email'
 const makeInput = (): {email: string} => ({
@@ -10,10 +9,10 @@ const makeInput = (): {email: string} => ({
 
 interface SutTypes {
   sut: Validation<Error>
-  emailValidatorStub: EmailValidator
+  emailValidatorStub: EmailValidation
 }
 const makeSut = (): SutTypes => {
-  class EmailValidatorStub implements EmailValidator {
+  class EmailValidatorStub implements EmailValidation {
     isValid (email: string): boolean {
       return true
     }

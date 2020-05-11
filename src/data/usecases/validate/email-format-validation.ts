@@ -1,9 +1,8 @@
-import { Validation } from '../../protocols/validation'
-import { EmailValidator } from '../../protocols/email-validator'
-import { InvalidParamError } from '../../errors'
+import { Validation, EmailValidation } from '../../../domain/usecases/validate/validation'
+import { InvalidParamError } from '../../../presentation/errors'
 
 export class EmailFormatValidation implements Validation <InvalidParamError> {
-  constructor (private readonly field: string, private readonly emailValidator: EmailValidator) { }
+  constructor (private readonly field: string, private readonly emailValidator: EmailValidation) { }
   validate (input: Record<string, any>): null | InvalidParamError {
     if (!this.emailValidator.isValid(input[this.field])) {
       return new InvalidParamError(this.field)

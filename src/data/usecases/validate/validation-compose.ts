@@ -1,4 +1,4 @@
-import { Validation } from '../../protocols/validation'
+import { Validation } from '../../../domain/usecases/validate/validation'
 
 export class ValidationCompose implements Validation<Error> {
   constructor (private readonly validations: Array<Validation<Error>>) { }

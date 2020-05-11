@@ -1,5 +1,5 @@
 import { ComparedFieldsValidation } from './compared-fields-validation'
-import { InvalidParamError } from '../../errors'
+import { InvalidParamError } from '../../../presentation/errors'
 
 describe('Confirmation Params Validation Helper', () => {
   test('should returns an error if provided field are different', () => {

@@ -2,7 +2,7 @@ import { LogInController } from './login-controller'
 import { serverError, unauthorized, ok, badRequest } from '../../helpers'
 import { InvalidUserOrPassword } from '../../../data/errors/invalid-user-or-email-error'
 import { Authenticate, AuthenticateModel, HttpRequest } from './login-controller-protocols'
-import { Validation } from '../../protocols/validation'
+import { Validation } from '../../../domain/usecases/authenticate/validation'
 import { TokenModel } from '../../../domain/usecases/authenticate/authenticate-usecase'
 
 const makeValidation = (): Validation<Error> => {

@@ -1,11 +1,11 @@
 import { makeValidationCompose } from './signup-validation'
-import { ValidationCompose, RequiredFieldsValidation, ComparedFieldsValidation, EmailFormatValidation } from '../../../../presentation/helpers/validation'
-import { EmailValidator } from '../../../../presentation/protocols/email-validator'
+import { ValidationCompose, RequiredFieldsValidation, ComparedFieldsValidation, EmailFormatValidation } from '../../../../data/usecases/validate'
+import { EmailValidation } from '../../../../domain/usecases/validate/validation'
 
-jest.mock('../../../../presentation/helpers/validation/validation-compose')
+jest.mock('../../../../data/usecases/validate/validation-compose')
 
-const makeEmailValidator = (): EmailValidator => {
-  class EmailValidatorStub implements EmailValidator {
+const makeEmailValidator = (): EmailValidation => {
+  class EmailValidatorStub implements EmailValidation {
     isValid (email: string): boolean {
       return true
     }
