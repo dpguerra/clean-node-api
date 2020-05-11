@@ -5,7 +5,7 @@ import { HashComparer } from '../../protocols/criptography/hash-comparer'
 import { DBAuthenticate } from './db-authenticate'
 import { Encrypter } from '../../protocols/criptography/encrypter'
 import { UpdateTokenRepository } from '../../protocols/db/update-token-repository'
-import { InvalidUserOrPassword } from '../../../domain/usecases/authenticate/invalid-user-or-email-error'
+import { InvalidUserOrPassword } from '../../errors/invalid-user-or-email-error'
 
 const makeFakeAccount = (): AccountModel => ({
   id: 'any_id',

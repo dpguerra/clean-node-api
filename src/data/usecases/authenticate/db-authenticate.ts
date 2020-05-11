@@ -3,7 +3,7 @@ import { LoadAccountByEmailRepository } from '../../protocols/db/load-account-by
 import { HashComparer } from '../../protocols/criptography/hash-comparer'
 import { Encrypter } from '../../protocols/criptography/encrypter'
 import { UpdateTokenRepository } from '../../protocols/db/update-token-repository'
-import { InvalidUserOrPassword } from '../../../domain/usecases/authenticate/invalid-user-or-email-error'
+import { InvalidUserOrPassword } from '../../errors/invalid-user-or-email-error'
 
 export class DBAuthenticate implements Authenticate {
   constructor (

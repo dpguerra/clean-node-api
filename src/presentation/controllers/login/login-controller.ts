@@ -1,5 +1,5 @@
 import { badRequest, serverError, ok, unauthorized } from '../../helpers'
-import { InvalidUserOrPassword } from '../../../domain/usecases/authenticate/invalid-user-or-email-error'
+import { InvalidUserOrPassword } from '../../../data/errors/invalid-user-or-email-error'
 import { Authenticate, Controller, HttpRequest, HttpResponse } from './login-controller-protocols'
 import { Validation } from '../../protocols/validation'
 

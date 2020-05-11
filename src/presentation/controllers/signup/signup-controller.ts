@@ -1,7 +1,7 @@
 import { Authenticate, Controller, HttpResponse, HttpRequest, AddAccount } from './signup-controller-protocols'
 import { badRequest, serverError, ok, forbiden } from '../../helpers'
 import { Validation } from '../../protocols/validation'
-import { EmailAlreadyInUse } from '../../../domain/usecases/account/duplicated-email-error'
+import { EmailAlreadyInUse } from '../../../data/errors/duplicated-email-error'
 
 export class SignUpController implements Controller {
   constructor (private readonly addAccount: AddAccount, private readonly validation: Validation<Error>, private readonly authenticate: Authenticate) {}

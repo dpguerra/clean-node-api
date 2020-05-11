@@ -4,7 +4,7 @@ import { AccountModel } from '../../../../domain/models/account'
 import { MongoHelper } from '../helpers/mongo-helper'
 import { LoadAccountByEmailRepository } from '../../../../data/protocols/db/load-account-by-email-repository'
 import { UpdateTokenRepository } from '../../../../data/protocols/db/update-token-repository'
-import { EmailAlreadyInUse } from '../../../../domain/usecases/account/duplicated-email-error'
+import { EmailAlreadyInUse } from '../../../../data/errors/duplicated-email-error'
 
 export class AccountMongoRepository implements AddAccountRepository, LoadAccountByEmailRepository, UpdateTokenRepository {
   async add (account: AddAccountModel): Promise<AccountModel> {
