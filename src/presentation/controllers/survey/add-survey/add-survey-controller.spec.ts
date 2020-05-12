@@ -2,7 +2,7 @@ import { Controller } from '../../../protocols'
 import { AddSurveyModel } from '../../../../domain/usecases/survey/survey-usecase'
 import { AddSurveyRepository } from '../../../../data/protocols/db/add-survey-repository'
 import { AddSurveyController } from './add-survey-controller'
-import { serverError } from '../../../helpers'
+import { serverError, noContent } from '../../../helpers'
 import { Validation } from '../../../../domain/usecases/validate/validation'
 
 const makeValidation = (): Validation<Error> => {
@@ -77,8 +77,6 @@ describe('AddSurveyController tests', () => {
   test('should returns 204 on success', async () => {
     const { sut } = makeSut()
     const result = await sut.handle({ body: makeFakeSurvey() })
-    expect(result).toEqual({
-      statusCode: 204
-    })
+    expect(result).toEqual(noContent())
   })
 })
