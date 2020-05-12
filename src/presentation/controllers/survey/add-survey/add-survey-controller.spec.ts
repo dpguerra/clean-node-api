@@ -2,6 +2,7 @@ import { Controller } from '../../../protocols'
 import { AddSurveyModel } from '../../../../domain/usecases/survey/survey-usecase'
 import { AddSurveyRepository } from '../../../../data/protocols/db/add-survey-repository'
 import { AddSurveyController } from './add-survey-controller'
+import { serverError } from '../../../helpers'
 
 interface SutTypes {
   sut: Controller
@@ -38,5 +39,13 @@ describe('AddSurveyController tests', () => {
     const addSpy = jest.spyOn(dbAddSurveyStub, 'add')
     await sut.handle({ body: makeFakeSurvey() })
     expect(addSpy).toHaveBeenCalledWith(makeFakeSurvey())
+  })
+  test('should returns 500 if DbAddSurvey throws', async () => {
+    const { sut, dbAddSurveyStub } = makeSut()
+    jest.spyOn(dbAddSurveyStub, 'add').mockImplementationOnce(async () => {
+      throw new Error()
+    })
+    const result = await sut.handle({ body: makeFakeSurvey() })
+    expect(result).toEqual(serverError(new Error()))
   })
 })
