@@ -1,5 +1,6 @@
 import { Controller, HttpRequest, HttpResponse } from '../../../protocols'
 import { AddSurveyRepository } from '../../../../data/protocols/db/add-survey-repository'
+import { serverError } from '../../../helpers'
 
 export class AddSurveyController implements Controller {
   constructor (
@@ -7,10 +8,14 @@ export class AddSurveyController implements Controller {
   ) { }
 
   async handle (request: HttpRequest): Promise<HttpResponse> {
-    const { body } = request
-    await this.addSurvey.add(body)
-    return await Promise.resolve({
-      statusCode: 204
-    })
+    try {
+      const { body } = request
+      await this.addSurvey.add(body)
+      return await Promise.resolve({
+        statusCode: 204
+      })
+    } catch (error) {
+      return serverError(error)
+    }
   }
 }
