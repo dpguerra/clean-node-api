@@ -1,5 +1,4 @@
-import { AddSurveyRepository, Controller, Validation } from './add-survey-protocols'
-import { AddSurveyModel } from '../../../../domain/usecases/survey/survey-usecase'
+import { AddSurvey, AddSurveyModel, Controller, Validation } from './add-survey-protocols'
 import { AddSurveyController } from './add-survey-controller'
 import { serverError, noContent, badRequest } from '../../../helpers'
 
@@ -11,8 +10,8 @@ const makeValidation = (): Validation<Error> => {
   }
   return new ValidationStub()
 }
-const makeDbAddSurvey = (): AddSurveyRepository => {
-  class DbAddSurveyStub implements AddSurveyRepository {
+const makeDbAddSurvey = (): AddSurvey => {
+  class DbAddSurveyStub implements AddSurvey {
     async add (survey: AddSurveyModel): Promise<void> {
       return await Promise.resolve()
     }
@@ -22,7 +21,7 @@ const makeDbAddSurvey = (): AddSurveyRepository => {
 
 interface SutTypes {
   sut: Controller
-  dbAddSurveyStub: AddSurveyRepository
+  dbAddSurveyStub: AddSurvey
   ValidationStub: Validation<Error>
 }
 

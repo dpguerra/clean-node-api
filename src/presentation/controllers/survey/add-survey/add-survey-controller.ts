@@ -1,9 +1,9 @@
 import { serverError, badRequest, noContent } from '../../../helpers'
-import { AddSurveyRepository, Controller, HttpRequest, HttpResponse, Validation } from './add-survey-protocols'
+import { AddSurvey, Controller, HttpRequest, HttpResponse, Validation } from './add-survey-protocols'
 
 export class AddSurveyController implements Controller {
   constructor (
-    private readonly addSurvey: AddSurveyRepository,
+    private readonly addSurvey: AddSurvey,
     private readonly validation: Validation<Error>
   ) { }
 
