@@ -1,9 +1,7 @@
-import { Controller } from '../../../protocols'
+import { AddSurveyRepository, Controller, Validation } from './add-survey-protocols'
 import { AddSurveyModel } from '../../../../domain/usecases/survey/survey-usecase'
-import { AddSurveyRepository } from '../../../../data/protocols/db/add-survey-repository'
 import { AddSurveyController } from './add-survey-controller'
 import { serverError, noContent, badRequest } from '../../../helpers'
-import { Validation } from '../../../../domain/usecases/validate/validation'
 
 const makeValidation = (): Validation<Error> => {
   class ValidationStub implements Validation<Error> {
