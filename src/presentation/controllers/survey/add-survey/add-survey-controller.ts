@@ -1,6 +1,6 @@
 import { Controller, HttpRequest, HttpResponse } from '../../../protocols'
 import { AddSurveyRepository } from '../../../../data/protocols/db/add-survey-repository'
-import { serverError, badRequest } from '../../../helpers'
+import { serverError, badRequest, noContent } from '../../../helpers'
 import { Validation } from '../../ident/login/login-controller-protocols'
 
 export class AddSurveyController implements Controller {
@@ -17,9 +17,7 @@ export class AddSurveyController implements Controller {
         return badRequest(validationResult)
       }
       await this.addSurvey.add(body)
-      return await Promise.resolve({
-        statusCode: 204
-      })
+      return await Promise.resolve(noContent())
     } catch (error) {
       return serverError(error)
     }

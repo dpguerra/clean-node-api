@@ -2,7 +2,7 @@ import { Controller } from '../../../protocols'
 import { AddSurveyModel } from '../../../../domain/usecases/survey/survey-usecase'
 import { AddSurveyRepository } from '../../../../data/protocols/db/add-survey-repository'
 import { AddSurveyController } from './add-survey-controller'
-import { serverError, noContent } from '../../../helpers'
+import { serverError, noContent, badRequest } from '../../../helpers'
 import { Validation } from '../../../../domain/usecases/validate/validation'
 
 const makeValidation = (): Validation<Error> => {
@@ -73,6 +73,14 @@ describe('AddSurveyController tests', () => {
     })
     const result = await sut.handle({ body: makeFakeSurvey() })
     expect(result).toEqual(serverError(new Error()))
+  })
+  test('should returns 400 if Validation fails', async () => {
+    const { sut, ValidationStub } = makeSut()
+    jest.spyOn(ValidationStub, 'validate').mockImplementationOnce(() => {
+      return new Error()
+    })
+    const result = await sut.handle({ body: makeFakeSurvey() })
+    expect(result).toEqual(badRequest(new Error()))
   })
   test('should returns 204 on success', async () => {
     const { sut } = makeSut()
