@@ -74,4 +74,11 @@ describe('AddSurveyController tests', () => {
     const result = await sut.handle({ body: makeFakeSurvey() })
     expect(result).toEqual(serverError(new Error()))
   })
+  test('should returns 204 on success', async () => {
+    const { sut } = makeSut()
+    const result = await sut.handle({ body: makeFakeSurvey() })
+    expect(result).toEqual({
+      statusCode: 204
+    })
+  })
 })
