@@ -44,4 +44,9 @@ describe('DBAddSurey Usecase tests', () => {
     const promise = sut.add(makeFakeSurvey())
     await expect(promise).rejects.toThrow()
   })
+  test('should returns void on success', async () => {
+    const { sut } = makeSut()
+    const result = await sut.add(makeFakeSurvey())
+    expect(result).toBeFalsy()
+  })
 })
