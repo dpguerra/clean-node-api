@@ -66,4 +66,12 @@ describe('AddSurveyController tests', () => {
     await sut.handle({ body: makeFakeSurvey() })
     expect(validateSpy).toHaveBeenCalledWith(makeFakeSurvey())
   })
+  test('should returns 500 if Validation throws', async () => {
+    const { sut, ValidationStub } = makeSut()
+    jest.spyOn(ValidationStub, 'validate').mockImplementationOnce(() => {
+      throw new Error()
+    })
+    const result = await sut.handle({ body: makeFakeSurvey() })
+    expect(result).toEqual(serverError(new Error()))
+  })
 })
