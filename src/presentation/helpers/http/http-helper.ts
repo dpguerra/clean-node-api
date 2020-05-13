@@ -1,8 +1,9 @@
 import { HttpResponse } from '../../protocols'
 import { ServerError } from '../../errors'
 
-export const proceed = (): HttpResponse => ({
-  statusCode: 100
+export const proceed = (data: any): HttpResponse => ({
+  statusCode: 100,
+  body: data
 })
 
 export const ok = (data: any): HttpResponse => ({
