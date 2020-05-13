@@ -14,7 +14,8 @@ export class AuthMiddleware implements Middleware {
     if (accessToken) {
       const account = await this.loadAccountByToken.load(accessToken)
       if (account) {
-        return await Promise.resolve(proceed(account.id))
+        const { id } = account
+        return await Promise.resolve(proceed({ id }))
       }
     }
     return await Promise.reject(forbiden(new AccessDeniedError()))
