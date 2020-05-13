@@ -1,5 +1,4 @@
-import { Middleware } from '../protocols/middleware'
-import { HttpRequest, HttpResponse } from '../protocols'
+import { HttpRequest, HttpResponse, Middleware } from './auth-middleware-protocols'
 import { forbiden, proceed, serverError } from '../helpers'
 import { AccessDeniedError } from '../errors'
 import { LoadAccountByToken } from '../../domain/usecases/account/load-account-usecase'

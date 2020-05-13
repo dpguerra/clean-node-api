@@ -1,8 +1,7 @@
 import { forbiden, proceed, serverError } from '../helpers'
 import { AccessDeniedError } from '../errors'
-import { Middleware } from '../protocols/middleware'
+import { HttpRequest, Middleware } from './auth-middleware-protocols'
 import { AuthMiddleware } from './auth-middleware'
-import { HttpRequest } from '../protocols'
 import { LoadAccountByToken } from '../../domain/usecases/account/load-account-usecase'
 import { AccountModel } from '../../domain/models/account'
 
@@ -45,7 +44,7 @@ describe('Authentication Middleware tests', () => {
     const response = sut.handle({})
     await expect(response).rejects.toEqual(forbiden(new AccessDeniedError()))
   })
-  test('should call LoadAccountByToken with correct value', async () => {
+  test('should call LoadAccountByToken with corrects values', async () => {
     const role = 'any_role'
     const { sut, loadAccountByTokenStub } = makeSut(role)
     const loadSpy = jest.spyOn(loadAccountByTokenStub, 'load')
