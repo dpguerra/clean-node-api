@@ -6,6 +6,6 @@ export class DBLoadAccountByToken implements LoadAccountByToken {
   constructor (private readonly accountMongoRepository: LoadAccountByTokenRepository) { }
   async load (query: LoadAccountByTokenModel): Promise<AccountModel | null> {
     const account = await this.accountMongoRepository.loadByToken(query)
-    return await Promise.resolve(account && null)
+    return await Promise.resolve(account ?? null)
   }
 }

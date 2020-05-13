@@ -43,4 +43,12 @@ describe('DBLoadAccountByToken Use Case tests', () => {
     await sut.load(query)
     expect(loadByTokenSpy).toHaveBeenCalledWith(query)
   })
+  test('should throw if LoadAccountByTokenRepository throws', async () => {
+    const { sut, accountMongoRepositoryStub } = makeSut()
+    jest.spyOn(accountMongoRepositoryStub, 'loadByToken').mockImplementationOnce(() => {
+      throw new Error()
+    })
+    const promise = sut.load(makeFakeQuery())
+    await expect(promise).rejects.toThrow()
+  })
 })
