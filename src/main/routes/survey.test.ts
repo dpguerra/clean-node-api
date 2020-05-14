@@ -52,7 +52,7 @@ describe('Survey Routes', () => {
         })
         .expect(403)
     })
-    test('should return 204 with a valid token', async () => {
+    test('should return 403 with a valid token and user has no admin role', async () => {
       const { ops } = await accountCollection.insertOne({
         name: 'valid_name',
         email: 'valid_email@exemple.com',
@@ -75,7 +75,7 @@ describe('Survey Routes', () => {
             'valid_answer'
           ]
         })
-        .expect(204)
+        .expect(403)
     })
   })
 })
