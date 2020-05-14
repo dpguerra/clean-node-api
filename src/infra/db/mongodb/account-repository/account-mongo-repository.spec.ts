@@ -69,6 +69,14 @@ describe('Account MongoDB Repository', () => {
       expect(account).toBeTruthy()
       expect(account?.id).toBeTruthy()
     })
+    test('should returns an account on success query only id', async () => {
+      const { ops } = await accountCollection.insertOne(makeFakeAccount())
+      const { id } = MongoHelper.map(ops[0])
+      const sut = makeSut()
+      const account = await sut.loadById({ id })
+      expect(account).toBeTruthy()
+      expect(account?.id).toBeTruthy()
+    })
   })
   describe('UpdateToken Method', () => {
     test('should returns void on success', async () => {
