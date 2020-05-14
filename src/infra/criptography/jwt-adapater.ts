@@ -10,6 +10,16 @@ export class JwtAdapter implements Decrypter, Encrypter {
   }
 
   async decrypt (token: string): Promise<any> {
-    return verify(token, this.secret)
+    let decoded: any | null
+    try {
+      decoded = verify(token, this.secret)
+    } catch (error) {
+      if (error.message === 'jwt malformed') {
+        return await Promise.resolve(null)
+      }
+      console.error(error)
+      return await Promise.reject(error)
+    }
+    return await Promise.resolve(decoded)
   }
 }
