@@ -23,7 +23,7 @@ describe('Survey Routes', () => {
     await surveyCollection.deleteMany({})
   })
   describe('POST /survey/add', () => {
-    test('should return void on success', async () => {
+    test('should return 403 without token', async () => {
       await request(app)
         .post('/api/survey/add')
         .send({
@@ -32,7 +32,7 @@ describe('Survey Routes', () => {
             'valid_answer'
           ]
         })
-        .expect(204)
+        .expect(403)
     })
   })
 })
