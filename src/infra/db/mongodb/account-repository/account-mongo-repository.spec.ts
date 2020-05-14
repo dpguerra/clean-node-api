@@ -30,7 +30,8 @@ describe('Account MongoDB Repository', () => {
   const makeFakeAccount = (): AddAccountModel => ({
     name: 'any_name',
     email: 'any_email@exemple.com',
-    password: 'any_password'
+    password: 'any_password',
+    role: 'any_role'
   })
 
   describe('Add Method', () => {
@@ -56,6 +57,17 @@ describe('Account MongoDB Repository', () => {
       const sut = makeSut()
       const account = await sut.loadByEmail('any_email@exemple.com')
       expect(account).toBeFalsy()
+    })
+  })
+  describe('LoadById Method', () => {
+    test('should returns an account on success query with id and role', async () => {
+      const { ops } = await accountCollection.insertOne(makeFakeAccount())
+      const { id } = MongoHelper.map(ops[0])
+      const role = 'any_role'
+      const sut = makeSut()
+      const account = await sut.loadById({ id, role })
+      expect(account).toBeTruthy()
+      expect(account?.id).toBeTruthy()
     })
   })
   describe('UpdateToken Method', () => {
