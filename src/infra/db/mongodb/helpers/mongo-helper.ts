@@ -1,4 +1,4 @@
-import { MongoClient, Collection } from 'mongodb'
+import { MongoClient, Collection, ObjectId } from 'mongodb'
 
 export const MongoHelper = {
   connection: null as unknown as MongoClient,
@@ -26,6 +26,6 @@ export const MongoHelper = {
   },
   unmap (collection: any): any {
     const { id, ...collectionWithoutId } = collection
-    return Object.assign({}, collectionWithoutId, { _id: id })
+    return Object.assign({}, collectionWithoutId, { _id: new ObjectId(id) })
   }
 }
