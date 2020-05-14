@@ -34,5 +34,17 @@ describe('Survey Routes', () => {
         })
         .expect(403)
     })
+    test('should return 403 with an invalid token', async () => {
+      await request(app)
+        .post('/api/survey/add')
+        .set('x-access-token', 'invalid_token')
+        .send({
+          question: 'valid_question',
+          answers: [
+            'valid_answer'
+          ]
+        })
+        .expect(403)
+    })
   })
 })
