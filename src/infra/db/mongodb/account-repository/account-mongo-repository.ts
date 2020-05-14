@@ -27,7 +27,8 @@ export class AccountMongoRepository implements AddAccountRepository, LoadAccount
 
   async loadById (query: LoadAccountByIdModel): Promise<AccountModel | null> {
     const accountCollection = await MongoHelper.getCollection('accounts')
-    const account = await accountCollection.findOne({ _id: query.id, role: query.role })
+    const dbQuery = MongoHelper.unmap(query)
+    const account = await accountCollection.findOne(dbQuery)
     return account && MongoHelper.map(account)
   }
 
