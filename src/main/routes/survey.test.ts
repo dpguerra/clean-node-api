@@ -77,5 +77,31 @@ describe('Survey Routes', () => {
         })
         .expect(403)
     })
+    test('should return 204 with a valid token and user has admin role', async () => {
+      const { ops } = await accountCollection.insertOne({
+        name: 'valid_name',
+        email: 'valid_email@exemple.com',
+        password: 'any_password',
+        role: 'admin'
+      })
+      const id = ops[0]._id
+      const token = sign({ id }, env.jwtSecret)
+      console.log(token)
+      await accountCollection.updateOne({
+        _id: id
+      }, {
+        $set: { token }
+      })
+      await request(app)
+        .post('/api/survey/add')
+        .set('x-access-token', token)
+        .send({
+          question: 'valid_question',
+          answers: [
+            'valid_answer'
+          ]
+        })
+        .expect(204)
+    })
   })
 })
