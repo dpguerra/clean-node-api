@@ -51,5 +51,10 @@ describe('JWT Adapter tests', () => {
       const promise = sut.decrypt('any_token')
       await expect(promise).rejects.toThrow()
     })
+    test('should returns a valid object on success', async () => {
+      const sut = makeSut()
+      const object = await sut.decrypt('any_token')
+      expect(object).toEqual({ id: 'any_id' })
+    })
   })
 })
