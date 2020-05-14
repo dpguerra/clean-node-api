@@ -24,8 +24,8 @@ export class AuthMiddleware implements Middleware {
         }
       }
     } catch (error) {
-      return await Promise.reject(serverError(error))
+      return await Promise.resolve(serverError(error))
     }
-    return await Promise.reject(forbiden(new AccessDeniedError()))
+    return await Promise.resolve(forbiden(new AccessDeniedError()))
   }
 }

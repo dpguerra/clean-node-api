@@ -42,7 +42,7 @@ describe('Authentication Middleware tests', () => {
   test('should return 403 if no x-access-token exists in headers', async () => {
     const { sut } = makeSut()
     const response = sut.handle({})
-    await expect(response).rejects.toEqual(forbiden(new AccessDeniedError()))
+    await expect(response).resolves.toEqual(forbiden(new AccessDeniedError()))
   })
   test('should call LoadAccountByToken with corrects values', async () => {
     const request = makeFakeRequest()
@@ -59,7 +59,7 @@ describe('Authentication Middleware tests', () => {
     const { sut, loadAccountByTokenStub } = makeSut()
     jest.spyOn(loadAccountByTokenStub, 'load').mockResolvedValueOnce(Promise.resolve(null))
     const response = sut.handle(makeFakeRequest())
-    await expect(response).rejects.toEqual(forbiden(new AccessDeniedError()))
+    await expect(response).resolves.toEqual(forbiden(new AccessDeniedError()))
   })
   test('should return 100 if LoadAccountByToken returns an account', async () => {
     const { sut } = makeSut()
@@ -72,6 +72,6 @@ describe('Authentication Middleware tests', () => {
       throw new Error()
     })
     const response = sut.handle(makeFakeRequest())
-    await expect(response).rejects.toEqual(serverError(new Error()))
+    await expect(response).resolves.toEqual(serverError(new Error()))
   })
 })
