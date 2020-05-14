@@ -1,0 +1,2 @@
+[![Build Status](https://travis-ci.com/dpguerra/clean-node-api.svg?branch=master)](https://travis-ci.com/dpguerra/clean-node-api)
+[![Coverage Status](https://coveralls.io/repos/github/dpguerra/clean-node-api/badge.svg?branch=master)](https://coveralls.io/github/dpguerra/clean-node-api?branch=master)
