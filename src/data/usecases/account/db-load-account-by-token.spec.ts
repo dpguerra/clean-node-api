@@ -65,6 +65,14 @@ describe('DBLoadAccountByToken Use Case tests', () => {
     const account = await sut.load(makeFakeQueryToken())
     expect(account).toBeNull()
   })
+  test('should throw if Decryter throws', async () => {
+    const { sut, decrypterStub } = makeSut()
+    jest.spyOn(decrypterStub, 'decrypt').mockImplementationOnce(() => {
+      throw new Error()
+    })
+    const promise = sut.load(makeFakeQueryToken())
+    await expect(promise).rejects.toThrow()
+  })
   test('should call AccountMongoRepository with correct values', async () => {
     const { sut, accountMongoRepositoryStub } = makeSut()
     const loadByTokenSpy = jest.spyOn(accountMongoRepositoryStub, 'loadById')
