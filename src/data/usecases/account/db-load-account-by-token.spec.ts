@@ -2,7 +2,16 @@ import { LoadAccountByToken, LoadAccountByTokenModel } from '../../../domain/use
 import { LoadAccountByTokenRepository } from '../../protocols/db/load-account-by-token-repository'
 import { AccountModel } from '../../../domain/models/account'
 import { DBLoadAccountByToken } from './db-load-account-by-token'
+import { Decrypter } from '../../protocols/criptography/decrypter'
 
+const makeDecrypter = (): Decrypter => {
+  class Descrypter implements Decrypter {
+    async decrypt (token: Object): Promise<any> {
+      return await Promise.resolve({ id: 'any_id' })
+    }
+  }
+  return new Descrypter()
+}
 const makeAccountMongoRepository = (): LoadAccountByTokenRepository => {
   class AccountMongoRepositoryStub implements LoadAccountByTokenRepository {
     async loadByToken (query: LoadAccountByTokenModel): Promise<AccountModel | null> {
@@ -14,13 +23,16 @@ const makeAccountMongoRepository = (): LoadAccountByTokenRepository => {
 
 interface SutTypes {
   sut: LoadAccountByToken
+  decrypterStub: Decrypter
   accountMongoRepositoryStub: LoadAccountByTokenRepository
 }
 
 const makeSut = (): SutTypes => {
+  const decrypterStub = makeDecrypter()
   const accountMongoRepositoryStub = makeAccountMongoRepository()
   return {
-    sut: new DBLoadAccountByToken(accountMongoRepositoryStub),
+    sut: new DBLoadAccountByToken(decrypterStub, accountMongoRepositoryStub),
+    decrypterStub,
     accountMongoRepositoryStub
   }
 }
@@ -36,6 +48,13 @@ const makeFakeAccount = (): AccountModel => ({
 })
 
 describe('DBLoadAccountByToken Use Case tests', () => {
+  test('should call Decrypter with correct value', async () => {
+    const { sut, decrypterStub } = makeSut()
+    const decryptSpy = jest.spyOn(decrypterStub, 'decrypt')
+    const query = makeFakeQuery()
+    await sut.load(query)
+    expect(decryptSpy).toHaveBeenCalledWith(query.token)
+  })
   test('should call AccountMongoRepository with correct values', async () => {
     const { sut, accountMongoRepositoryStub } = makeSut()
     const loadByTokenSpy = jest.spyOn(accountMongoRepositoryStub, 'loadByToken')
