@@ -10,7 +10,10 @@ export class DBLoadAccountByToken implements LoadAccountByToken {
   ) { }
 
   async load (query: LoadAccountByTokenModel): Promise<AccountModel | null> {
-    await this.decrypter.decrypt(query.token)
+    const decoded = await this.decrypter.decrypt(query.token)
+    if (!decoded) {
+      return await Promise.resolve(null)
+    }
     const account = await this.accountMongoRepository.loadByToken(query)
     return await Promise.resolve(account ?? null)
   }
