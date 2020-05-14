@@ -5,8 +5,10 @@ import { MongoHelper } from '../helpers/mongo-helper'
 import { LoadAccountByEmailRepository } from '../../../../data/protocols/db/load-account-by-email-repository'
 import { UpdateTokenRepository } from '../../../../data/protocols/db/update-token-repository'
 import { EmailAlreadyInUse } from '../../../../data/errors/duplicated-email-error'
+import { LoadAccountByIdRepository } from '../../../../data/protocols/db/load-account-by-id-repository'
+import { LoadAccountByIdModel } from '../../../../domain/usecases/account/load-account-usecase'
 
-export class AccountMongoRepository implements AddAccountRepository, LoadAccountByEmailRepository, UpdateTokenRepository {
+export class AccountMongoRepository implements AddAccountRepository, LoadAccountByEmailRepository, LoadAccountByIdRepository, UpdateTokenRepository {
   async add (account: AddAccountModel): Promise<AccountModel> {
     const accountCollection = await MongoHelper.getCollection('accounts')
     try {
@@ -20,6 +22,12 @@ export class AccountMongoRepository implements AddAccountRepository, LoadAccount
   async loadByEmail (email: string): Promise<AccountModel | null> {
     const accountCollection = await MongoHelper.getCollection('accounts')
     const account = await accountCollection.findOne({ email })
+    return account && MongoHelper.map(account)
+  }
+
+  async loadById (query: LoadAccountByIdModel): Promise<AccountModel | null> {
+    const accountCollection = await MongoHelper.getCollection('accounts')
+    const account = await accountCollection.findOne({ _id: query.id, role: query.role })
     return account && MongoHelper.map(account)
   }
 
