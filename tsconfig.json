@@ -1,16 +1,19 @@
 {
-  "include": [
-    "**/*"
-  ],
-  "exclude": [
-    "./dist"
-  ],
+  "include": ["src", "tests"],
+  "exclude": ["dist"],
   "compilerOptions": {
-    "outDir": "./dist",
+    "outDir": "dist",
     "module": "commonjs",
     "target": "es2021",
     "esModuleInterop": true,
+    "sourceMap": true,
     "allowJs": true,
-    "strictNullChecks": true
+    "strictNullChecks": true,
+    "rootDirs": ["src", "tests"],
+    "baseUrl": "src",
+    "paths": {
+      "@/tests/*": ["../tests/*"],
+      "@/*": ["*"]
+    }
   }
 }

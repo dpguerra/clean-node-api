@@ -1,3 +1,5 @@
+.husky/
 coverage/
+data/
 dist/
 node_modules/
